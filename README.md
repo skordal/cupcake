@@ -6,13 +6,16 @@ What is it?
 
 Cupcake is a GUI toolkit for Ada. It is designed to be uncomplicated and easy to use.
 
-What is its current development status?
+What is its current status?
 ---------------------------------------
 
 Cupcake's current capabilities are:
 * Can show windows, but does not draw anything in them.
 * Can close windows, which is pretty nice.
+* It is only documented in the source code for now.
 * Cannot really do anything else.
+
+These capabilities are demonstrated nicely by the demo programme.
 
 How do I build and install it?
 ------------------------------
@@ -27,7 +30,7 @@ When everything is ready to go, simply issue _make_, and watch the library be bu
 Where do I report bugs?
 -----------------------
 
-Bugs are reported on the project's GitHub page, <http://github.com/skordal/cupcake/issues>. Patches and other contributions are also welcome.
+Bugs are reported on the project's GitHub page, <http://github.com/skordal/cupcake/issues>. Patches and other contributions are also welcome on this page.
 
 How is it licensed?
 -------------------
