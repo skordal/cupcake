@@ -1,0 +1,10 @@
+# Ignore built files:
+*.o
+*.ali
+libcupcake.*
+demos/demos
+
+# Ignore vim swap files:
+.*.swp
+.*.swo
+

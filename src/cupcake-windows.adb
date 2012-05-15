@@ -1,0 +1,171 @@
+-- The Cupcake GUI Toolkit
+-- (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
+-- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
+
+with Ada.Text_IO;
+with Ada.Unchecked_Deallocation;
+with Interfaces.C.Strings;
+
+package body Cupcake.Windows is
+	package C renames Interfaces.C;
+
+	-- Available backend functions:
+	function Backend_Window_Create(Parent : in Backend_Data_Ptr;
+		Width, Height : in Positive) return Backend_Data_Ptr;
+	procedure Backend_Window_Finalize(Window : in Backend_Data_Ptr);
+	procedure Backend_Window_Set_Title(Window : in Backend_Data_Ptr;
+		Title : in C.Strings.chars_ptr);
+	function Backend_Window_Get_ID(Window : in Backend_Data_Ptr) return Window_ID_Type;
+	procedure Backend_Window_Show(Window : in Backend_Data_Ptr);
+	procedure Backend_Window_Close(Window : in Backend_Data_Ptr);
+
+	pragma Import(C, Backend_Window_Create, "backend_window_create");
+	pragma Import(C, Backend_Window_Finalize, "backend_window_finalize");
+	pragma Import(C, Backend_Window_Set_Title, "backend_window_set_title");
+	pragma Import(C, Backend_Window_Get_ID, "backend_window_get_id");
+	pragma Import(C, Backend_Window_Show, "backend_window_show");
+	pragma import(C, Backend_Window_Close, "backend_window_close");
+
+	-- Creates a new window:
+	function New_Window(Width, Height : in Positive; Title : in String) return Window is
+		Size : constant Primitives.Dimension := (Width, Height);
+	begin
+		return New_Window(Size, Title);
+	end New_Window;
+
+	-- Creates a new window:
+	function New_Window(Size : in Primitives.Dimension; Title : in String) return Window is
+		Retval : constant Window := new Window_Record;
+		C_Title : C.Strings.chars_ptr := C.Strings.New_String(Title);
+	begin
+		Retval.Backend_Data := Backend_Window_Create(System.Null_Address,
+			Size.Width, Size.Height);
+		Retval.Window_ID := Backend_Window_Get_ID(Retval.Backend_Data);
+		Retval.Size := Size;
+
+		Backend_Window_Set_Title(Retval.Backend_Data, C_Title);
+		C.Strings.Free(C_Title);
+
+		Window_List.Append(Retval);
+
+		return Retval;
+	end New_Window;
+
+	-- Destroys a window:
+	procedure Destroy(Object : not null access Window_Record) is
+		use Ada.Containers; -- <-- To allow comparison of window list length.
+
+		-- Deallocation procedure for window records:
+		type Window_Access is access all Window_Record;
+		procedure Free is new Ada.Unchecked_Deallocation(Object => Window_Record,
+			Name => Window_Access);
+
+		Win : Window_Access := Window_Access(Object);
+	begin
+		Object.Close;
+		Free(Win);
+	end Destroy;
+
+	-- Finalizes a window:
+	overriding procedure Finalize(Object : in out Window_Record) is
+	begin
+		Backend_Window_Finalize(Object.Backend_Data);
+	end Finalize;
+
+	-- Shows a window:
+	procedure Show(This : in Window_Record'Class) is
+	begin
+		Backend_Window_Show(This.Backend_Data);
+	end Show;
+
+	-- Closes a window:
+	procedure Close(This : in Window_Record'Class) is
+	begin
+		Backend_Window_Close(This.Backend_Data);
+	end Close;
+
+	-- Gets the window ID:
+	function Get_ID(This : in Window_Record'Class) return Window_ID_Type is
+	begin
+		return This.Window_ID;
+	end Get_ID;
+
+	-- Gets the size of a window:
+	function Get_Size(This : in Window_Record) return Primitives.Dimension is
+	begin
+		return This.Size;
+	end Get_Size;
+
+	-- Finds a window by its ID:
+	function Find_Window_By_ID(ID : in Window_ID_Type) return Window is
+		use Window_Lists;
+		Window_Cursor : Cursor := Window_List.First;
+	begin
+		while Has_Element(Window_Cursor) loop
+			if Element(Window_Cursor).Window_ID = ID then
+				return Element(Window_Cursor);
+			end if;
+			Window_Cursor := Next(Window_Cursor);
+		end loop;
+
+		return null;
+	end Find_Window_By_ID;
+
+	-- Gets the backend specific data pointer from a window by its ID:
+	function Get_Backend_Data_For_Window_By_ID(ID : in Window_ID_Type) return Backend_Data_Ptr is
+		Target : constant Window := Find_Window_By_ID(ID);
+	begin
+		return Target.Backend_Data;
+	end Get_Backend_Data_For_Window_By_ID;
+
+	-- Posts an expose event to a window:
+	procedure Post_Expose(ID : in Window_ID_Type) is
+	begin
+		if Debug_Mode then
+			Ada.Text_IO.Put_Line("Expose event received for window"
+				& Window_ID_Type'Image(ID));
+		end if;
+	end Post_Expose;
+
+	-- Posts a window close event to a window:
+	function Post_Window_Close(ID : in Window_ID_Type) return Integer is
+		use Cupcake.Events; -- Allows comparison of event handlers with null.
+		use Ada.Containers; -- Allows window list size comparison.
+
+		Target : constant Window := Find_Window_By_ID(ID);
+		Target_Cursor : Window_Lists.Cursor := Window_List.Find(Target);
+		Closing : Boolean := false;
+	begin
+		Ada.Text_IO.Put_Line("Window close event received for window"
+			& Window_ID_Type'Image(ID));
+	
+		if Target = null or not Window_Lists.Has_Element(Target_Cursor) then
+			Ada.Text_IO.Put_Line("Invalid window ID or not visible window: "
+				& Window_ID_Type'Image(ID));
+			return 0;
+		end if;
+
+		if (Target.Event_Handlers.Window_Closing_Handler /= null
+			and then Target.Event_Handlers.Window_Closing_Handler.all)
+		or
+			Target.Event_Handlers.Window_Closing_Handler = null
+		then
+			Closing := true;
+		end if;
+
+		if Closing then
+			Window_List.Delete(Target_Cursor);
+			return 1;
+		else
+			return 0;
+		end if;
+	end Post_Window_Close;
+
+	-- Gets the number of windows remaining:
+	function Get_Num_Windows_Remaining return Natural is
+	begin
+		return Natural(Window_List.Length);
+	end Get_Num_Windows_Remaining;
+
+end Cupcake.Windows;
+
