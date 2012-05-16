@@ -3,9 +3,12 @@
 # Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
 # Build tools:
-AR     ?= ar
-GNATCC ?= gnatgcc
-RANLIB ?= ranlib
+AR      ?= ar
+GNATCC  ?= gnatgcc
+RANLIB  ?= ranlib
+
+# Documentation build tools:
+POD2MAN ?= pod2man
 
 # Build flags:
 GNATFLAGS += -O2 -fPIC -gnatwa -gnatVa

@@ -1,0 +1,65 @@
+=for comment
+Cupcake Manual Pages
+(c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
+Report bugs and issues on <http://github.com/skordal/cupcake/issues>
+=end comment
+
+=head1 NAME
+
+Cupcake - Cupcake top-level package
+
+=head1 USAGE
+
+	with Cupcake;
+
+=head1 DESCRIPTION
+
+The top-level Cupcake package contains general methods and constants
+for the Cupcake toolkit.
+
+=head1 INITIALIZATION AND FINALIZATION
+
+	procedure Initialize;
+
+This procedure must be called before any other Cupcake functionality is
+utilized. It initializes the windowing system backend and other important
+sub-systems.
+
+	procedure Finalize
+
+This function cleans up after you are done using Cupcake. It must be the
+I<last> Cupcake function called.
+
+=head1 MAIN LOOP
+
+	procedure Main_Loop;
+
+This procedure enters the main loop. When the main loop terminates, the
+procedure returns.
+
+	procedure Main_Loop_Terminate
+
+This procedure can be used in event handlers to exit from the main loop.
+
+=head1 EXCEPTIONS
+
+	Initialization_Exception : exception;
+
+This exception is raised if an error occurs during backend initialization.
+It contains an error message which may explain more about the cause of
+the exception.
+
+=head1 CONSTANTS
+
+	VERSION_MAJOR    : constant := <major version>;
+	VERSION_MINOR    : constant := <minor version>;
+	VERSION_REVISION : constant := <revision number>;
+
+The VERSION_* constants contain the current version of the Cupcake library.
+
+=head1 AUTHOR
+
+The Cupcake toolkit is written by Kristian Klomsten Skordal. New releases
+and bug tracking can be found on its GitHub page, at
+L<http://github.com/skordal/cupcake>.
+

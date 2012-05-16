@@ -1,0 +1,60 @@
+=for comment
+Cupcake Manual Pages
+(c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
+Report bugs and issues on <http://github.com/skordal/cupcake/issues>
+
+A note on some of the methods below; these are not identical to the
+methods in the code, but modified for simplicity.
+=end comment
+
+=head1 NAME
+
+Cupcake.Windows - Cupcake window management package
+
+=head1 USAGE
+
+	with Cupcake.Windows;
+
+=head1 DESCRIPTION
+
+The C<Cupcake.Windows> package contains methods and types for managing windows
+and dialogues.
+
+=head1 TYPES
+
+	type Window_Record is tagged private;
+	type Window is access all Window_Record'Class;
+
+=head1 WINDOW CREATION AND DESTRUCTION
+
+	function New_Window(Width, Height : in Positive; Title : in String) return Window;
+	function New_Window(Size : in Primitives.Dimension; Title : in String) return Window;
+
+Creates a new window with the specified dimensions and title. The window is not
+shown on the screen until C<Show> is called on the window.
+
+	procedure Destroy(Object : in Window);
+
+Destroys a window by freeing the allocated resources. If the window is currently
+visible on the screen, it is closed and then destroyed.
+
+=head1 WINDOW OPERATIONS
+
+	procedure Show(This : in Window)
+
+Shows the specified window on the screen.
+
+	procedure Close(This : in Window)
+
+Closes the specified window. Closed windows receive no events.
+
+	function Get_Size(This : in Window) return Primitives.Dimension;
+
+Gets the window size as a C<Primitives.Dimension> object.
+
+=head1 AUTHOR
+
+The Cupcake toolkit is written by Kristian Klomsten Skordal. New releases
+and bug tracking can be found on its GitHub page, at
+L<http://github.com/skordal/cupcake>.
+

@@ -7,6 +7,9 @@ demos/demos
 *.a
 *.so
 
+# Ignore generated manual pages:
+*.3
+
 # Ignore vim swap files:
 .*.swp
 .*.swo
