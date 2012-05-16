@@ -11,9 +11,9 @@ What is its current status?
 
 Cupcake's current capabilities are:
 * Can show windows, but does not draw anything in them.
-* Can close windows, which is pretty nice.
-* It is only documented in the source code for now.
-* Cannot really do anything else.
+* Can close windows, which is a pretty nice feature to have.
+* ...but cannot really do anything else.
+* Also has some rudimentary man-pages.
 
 These capabilities are demonstrated nicely by the demo programme.
 
