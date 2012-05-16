@@ -1,8 +1,11 @@
 # Ignore built files:
 *.o
 *.ali
-libcupcake.*
 demos/demos
+
+# Ignore library files:
+*.a
+*.so
 
 # Ignore vim swap files:
 .*.swp
