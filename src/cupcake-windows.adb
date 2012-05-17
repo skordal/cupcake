@@ -53,8 +53,6 @@ package body Cupcake.Windows is
 
 	-- Destroys a window:
 	procedure Destroy(Object : not null access Window_Record) is
-		use Ada.Containers; -- <-- To allow comparison of window list length.
-
 		-- Deallocation procedure for window records:
 		type Window_Access is access all Window_Record;
 		procedure Free is new Ada.Unchecked_Deallocation(Object => Window_Record,
@@ -91,10 +89,32 @@ package body Cupcake.Windows is
 	end Get_ID;
 
 	-- Gets the size of a window:
-	function Get_Size(This : in Window_Record) return Primitives.Dimension is
+	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension is
 	begin
 		return This.Size;
 	end Get_Size;
+
+	-- Mouse event handler:
+	function Mouse_Handler(This : in Window_Record; Mouse_Event : in Events.Mouse_Event_Record)
+		return Boolean is
+	begin
+		return true;
+	end Mouse_Handler;
+
+	-- Keyboard event handler:
+	function Keyboard_Handler(This : in Window_Record; Keyboard_Event : in Events.Keyboard_Event_Record)
+		return Boolean is
+	begin
+		return true;
+	end Keyboard_Handler;
+
+	-- Window closing handler:
+	function Window_Closing_Handler(This : in Window_Record) return Boolean is
+	begin
+		return true;
+	end Window_Closing_Handler;
+
+	-- Window closing message handler:
 
 	-- Finds a window by its ID:
 	function Find_Window_By_ID(ID : in Window_ID_Type) return Window is
@@ -120,21 +140,25 @@ package body Cupcake.Windows is
 
 	-- Posts an expose event to a window:
 	procedure Post_Expose(ID : in Window_ID_Type) is
+		use Cupcake.Events;
+		Target : Window := Find_Window_By_ID(ID);
 	begin
 		if Debug_Mode then
 			Ada.Text_IO.Put_Line("Expose event received for window"
 				& Window_ID_Type'Image(ID));
 		end if;
+
+		if Target = null then
+			Ada.Text_IO.Put_Line("Invalid window ID" & Window_ID_Type'Image(ID));
+		end if;
 	end Post_Expose;
 
 	-- Posts a window close event to a window:
 	function Post_Window_Close(ID : in Window_ID_Type) return Integer is
-		use Cupcake.Events; -- Allows comparison of event handlers with null.
-		use Ada.Containers; -- Allows window list size comparison.
-
+		use Cupcake.Events;
 		Target : constant Window := Find_Window_By_ID(ID);
 		Target_Cursor : Window_Lists.Cursor := Window_List.Find(Target);
-		Closing : Boolean := false;
+		Closing : Boolean := true;
 	begin
 		Ada.Text_IO.Put_Line("Window close event received for window"
 			& Window_ID_Type'Image(ID));
@@ -143,14 +167,6 @@ package body Cupcake.Windows is
 			Ada.Text_IO.Put_Line("Invalid window ID or not visible window: "
 				& Window_ID_Type'Image(ID));
 			return 0;
-		end if;
-
-		if (Target.Event_Handlers.Window_Closing_Handler /= null
-			and then Target.Event_Handlers.Window_Closing_Handler.all)
-		or
-			Target.Event_Handlers.Window_Closing_Handler = null
-		then
-			Closing := true;
 		end if;
 
 		if Closing then

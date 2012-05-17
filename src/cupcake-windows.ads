@@ -4,7 +4,7 @@
 
 with Ada.Finalization;
 with Cupcake.Primitives;
-private with Cupcake.Events;
+with Cupcake.Events;
 
 private with System;
 private with Ada.Containers.Doubly_Linked_Lists;
@@ -13,7 +13,7 @@ package Cupcake.Windows is
 	use Ada;
 
 	-- Normal window type:
-	type Window_Record (<>) is new Finalization.Limited_Controlled with private;
+	type Window_Record (<>) is new Finalization.Limited_Controlled and Events.Window_Event_Receiver with private;
 	type Window is access all Window_Record'Class;
 
 	-- Type used for window IDs:
@@ -39,7 +39,7 @@ package Cupcake.Windows is
 	pragma Inline(Close);
 
 	-- Window size operations:
-	function Get_Size(This : in Window_Record) return Primitives.Dimension;
+	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension;
 	pragma Inline(Get_Size);
 
 	-- Gets the window ID:
@@ -55,12 +55,21 @@ private
 	subtype Backend_Data_Ptr is System.Address;
 
 	-- Normal window type definition:
-	type Window_Record is new Finalization.Limited_Controlled with record
+	type Window_Record is new Finalization.Limited_Controlled and Events.Window_Event_Receiver with record
 			Window_ID : Window_ID_Type;
 			Size : Primitives.Dimension;
 			Backend_Data : Backend_Data_Ptr;
-			Event_Handlers : Events.Event_Handler_Set;
 		end record;
+
+	-- Event handlers for windows:
+	procedure Expose_Handler(This : in Window_Record) is null;
+	procedure Resize_Handler(This : in Window_Record; New_Size : in Primitives.Dimension) is null;
+	function Mouse_Handler(This : in Window_Record; Mouse_Event : in Events.Mouse_Event_Record)
+		return Boolean;
+	function Keyboard_Handler(This : in Window_Record; Keyboard_Event : in Events.Keyboard_Event_Record)
+		return Boolean;
+	procedure Window_Shown_Handler(This : in Window_Record) is null;
+	function Window_Closing_Handler(This : in Window_Record) return Boolean;
 
 	-- Finds a window by its ID:
 	function Find_Window_By_ID(ID : in Window_ID_Type) return Window;

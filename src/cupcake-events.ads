@@ -6,18 +6,6 @@ with Cupcake.Primitives;
 
 package Cupcake.Events is
 
-	-- Event numbers:
-	type Event_Type is (
-		EXPOSE, WINDOW_RESIZE, WINDOW_EVENT,
-		MOUSE_ENTER, MOUSE_LEAVE, MOUSE_BUTTON_PRESS,
-		MOUSE_BUTTON_RELEASE, MOUSE_MOVE, KEYBOARD_PRESS, KEYBOARD_RELEASE
-	);
-
-	-- Window event type:
-	type Window_Event_Type is (
-		WINDOW_SHOWN, WINDOW_CLOSED, WINDOW_MINIMIZED, WINDOW_MAXIMIZED
-	);
-
 	-- Mouse button type:
 	type Mouse_Button_Type is (LEFT_BUTTON, MIDDLE_BUTTON, RIGHT_BUTTON);
 
@@ -37,7 +25,7 @@ package Cupcake.Events is
 		end record;
 
 	-- Keyboard key event record:
-	type Keyboard_Event (Event_Type : Keyboard_Event_Type := CHARACTER_KEY) is record
+	type Keyboard_Event_Record (Event_Type : Keyboard_Event_Type) is record
 			Button_State : Button_State_Type := DOWN;
 			Meta_Keys : Meta_Key_Info;
 			case Event_Type is
@@ -48,28 +36,41 @@ package Cupcake.Events is
 			end case;
 		end record;
 
-	-- Event handler types:
-	type Expose_Handler_Access is access procedure;
-	type Resize_Handler_Access is access procedure(New_Size : in Primitives.Dimension);
-	type Window_Event_Handler_Access is access procedure(Event_Type : in Window_Event_Type);
-	type Mouse_Move_Handler_Access is access procedure(Position : in Primitives.Point);
-	type Mouse_Button_Handler_Access is access function(Position : in Primitives.Point;
-		Button : in Mouse_Button_Type; Button_State : in Button_State_Type) return Boolean;
-	type Keyboard_Handler_Access is access function(Event : in Keyboard_Event) return Boolean;
-	type Window_Shown_Handler_Access is access procedure;
-	type Window_Closing_Handler_Access is access function return Boolean;
+	-- Mouse event enumeration:
+	type Mouse_Event_Type is (MOUSE_MOVE_EVENT, MOUSE_BUTTON_EVENT, MOUSE_ENTER_EVENT, MOUSE_LEAVE_EVENT);
 
-	-- Set of event handlers:
-	type Event_Handler_Set is record
-			Expose_Handler : Expose_Handler_Access := null;
-			Resize_Handler : Resize_Handler_Access := null;
-			Window_Event_Handler : Window_Event_Handler_Access := null;
-			Mouse_Move_Handler : Mouse_Move_Handler_Access := null;
-			Mouse_Button_Handler : Mouse_Button_Handler_Access := null;
-			Keyboard_Handler : Keyboard_Handler_Access := null;
-			Window_Shown_Handler : Window_Shown_Handler_Access := null;
-			Window_Closing_Handler : Window_Closing_Handler_Access := null;
+	-- A mouse event:
+	type Mouse_Event_Record (Event_Type : Mouse_Event_Type) is record
+			Position : Primitives.Point;
+			case Event_Type is
+				when MOUSE_BUTTON_EVENT =>
+					Button_State : Button_State_Type;
+					Button : Mouse_Button_Type;
+				when others =>
+					null;
+			end case;
 		end record;
+
+	-- Interface for an object receiving events:
+	type Event_Receiver is limited interface;
+
+	-- Event handlers included in the Event_Receiver interface:
+	procedure Expose_Handler(This : in Event_Receiver) is abstract;
+	procedure Resize_Handler(This : in Event_Receiver; New_Size : in Primitives.Dimension) is abstract;
+	function Mouse_Handler(This : in Event_Receiver; Mouse_Event : in Mouse_Event_Record)
+		return Boolean is abstract; -- Returns false if the event should not propagate to child objects.
+	function Keyboard_Handler(This : in Event_Receiver; Keyboard_Event : in Keyboard_Event_Record)
+		return Boolean is abstract; -- Returns false if the event should not propagate to child objects.
+
+	-- Event receiver interface for windows. This interface contains more events
+	-- than does the normal Event_Receiver interface, because windows can also
+	-- receive special window events.
+	type Window_Event_Receiver is limited interface and Event_Receiver;
+
+	-- Additional event handlers included in the Window_Event_Receiver interface:
+	procedure Window_Shown_Handler(This : in Window_Event_Receiver) is abstract;
+	function Window_Closing_Handler(This : in Window_Event_Receiver)
+		return Boolean is abstract; -- Returns false if the window should not close.
 
 end Cupcake.Events;
 
