@@ -2,6 +2,8 @@
 -- (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
+with System;
+
 package Cupcake is
 
 	-- Cupcake version:
@@ -25,6 +27,9 @@ package Cupcake is
 	-- Exits the main loop:
 	procedure Main_Loop_Terminate;
 	pragma Import(C, Main_Loop_Terminate, "backend_main_loop_terminate");
+
+	-- Type used for pointers to backend specific data:
+	subtype Backend_Data_Ptr is System.Address;
 
 	-- Set to true to get debug messages:
 	Debug_Mode : constant Boolean := true;

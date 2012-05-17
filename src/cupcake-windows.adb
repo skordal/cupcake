@@ -150,6 +150,9 @@ package body Cupcake.Windows is
 
 		if Target = null then
 			Ada.Text_IO.Put_Line("Invalid window ID" & Window_ID_Type'Image(ID));
+		else
+		--	Target.Expose_Handler;
+			null;
 		end if;
 	end Post_Expose;
 
@@ -158,7 +161,7 @@ package body Cupcake.Windows is
 		use Cupcake.Events;
 		Target : constant Window := Find_Window_By_ID(ID);
 		Target_Cursor : Window_Lists.Cursor := Window_List.Find(Target);
-		Closing : Boolean := true;
+		Closing : Boolean := false;
 	begin
 		Ada.Text_IO.Put_Line("Window close event received for window"
 			& Window_ID_Type'Image(ID));
@@ -168,6 +171,8 @@ package body Cupcake.Windows is
 				& Window_ID_Type'Image(ID));
 			return 0;
 		end if;
+
+		Closing := Target.Window_Closing_Handler;
 
 		if Closing then
 			Window_List.Delete(Target_Cursor);

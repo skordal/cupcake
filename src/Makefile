@@ -8,6 +8,7 @@ include ../config.mk
 # Ada source files to build:
 SOURCE_FILES := \
 	cupcake.adb \
+	cupcake-graphics.adb \
 	cupcake-windows.adb
 
 # Ada specification files to build:

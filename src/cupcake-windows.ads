@@ -6,8 +6,8 @@ with Ada.Finalization;
 with Cupcake.Primitives;
 with Cupcake.Events;
 
-private with System;
 private with Ada.Containers.Doubly_Linked_Lists;
+private with Cupcake.Graphics;
 
 package Cupcake.Windows is
 	use Ada;
@@ -51,9 +51,6 @@ private
 	package Window_Lists is new Ada.Containers.Doubly_Linked_Lists(Window);
 	Window_List : Window_Lists.List;
 
-	-- Type used for the pointer to backend specific data:
-	subtype Backend_Data_Ptr is System.Address;
-
 	-- Normal window type definition:
 	type Window_Record is new Finalization.Limited_Controlled and Events.Window_Event_Receiver with record
 			Window_ID : Window_ID_Type;
@@ -62,7 +59,7 @@ private
 		end record;
 
 	-- Event handlers for windows:
-	procedure Expose_Handler(This : in Window_Record) is null;
+	procedure Expose_Handler(This : in Window_Record; Graphics_Context : in Graphics.Context) is null;
 	procedure Resize_Handler(This : in Window_Record; New_Size : in Primitives.Dimension) is null;
 	function Mouse_Handler(This : in Window_Record; Mouse_Event : in Events.Mouse_Event_Record)
 		return Boolean;

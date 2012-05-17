@@ -3,6 +3,7 @@
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
 with Cupcake.Primitives;
+with Cupcake.Graphics;
 
 package Cupcake.Events is
 
@@ -55,7 +56,7 @@ package Cupcake.Events is
 	type Event_Receiver is limited interface;
 
 	-- Event handlers included in the Event_Receiver interface:
-	procedure Expose_Handler(This : in Event_Receiver) is abstract;
+	procedure Expose_Handler(This : in Event_Receiver; Graphics_Context : in Graphics.Context) is abstract;
 	procedure Resize_Handler(This : in Event_Receiver; New_Size : in Primitives.Dimension) is abstract;
 	function Mouse_Handler(This : in Event_Receiver; Mouse_Event : in Mouse_Event_Record)
 		return Boolean is abstract; -- Returns false if the event should not propagate to child objects.
