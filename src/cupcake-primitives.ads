@@ -9,12 +9,9 @@ package Cupcake.Primitives is
 			X, Y : Integer;
 		end record;
 
-	-- Origin point:
-	Origin : constant Point := (0, 0);
-
 	-- Type for specifying dimensions:
 	type Dimension is record
-			Width, Height : Positive;
+			Width, Height : Natural;
 		end record;
 
 	-- Rectangle type:
