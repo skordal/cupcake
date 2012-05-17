@@ -2,6 +2,7 @@
 -- (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
+with Cupcake.Colors;
 with Cupcake.Primitives;
 
 package Cupcake.Graphics is
@@ -21,6 +22,15 @@ package Cupcake.Graphics is
 
 	-- Destroys a graphics context:
 	procedure Destroy(Object : not null access Context_Record);
+
+	-- Graphics context attribute operations:
+	procedure Set_Size(This : out Context_Record'Class; New_Size : in Primitives.Dimension);
+	function Get_Size(This : in Context_Record'Class) return Primitives.Dimension;
+	pragma Inline(Set_Size, Get_Size);
+
+	-- Graphics context drawing operations:
+	procedure Fill(This : in Context_Record'Class; Color : in Colors.Color;
+		Shape : in Primitives.Rectangle);
 
 private
 

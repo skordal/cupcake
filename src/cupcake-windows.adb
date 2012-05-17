@@ -46,6 +46,8 @@ package body Cupcake.Windows is
 		Backend_Window_Set_Title(Retval.Backend_Data, C_Title);
 		C.Strings.Free(C_Title);
 
+		Retval.Graphics_Context := Graphics.New_Context(Retval.Backend_Data, Size);
+
 		Window_List.Append(Retval);
 
 		return Retval;
@@ -94,6 +96,32 @@ package body Cupcake.Windows is
 		return This.Size;
 	end Get_Size;
 
+	-- Gets the background color of a window:
+	function Get_Background_Color(This : in Window_Record'Class) return Colors.Color is
+	begin
+		return This.Background_Color;
+	end Get_Background_Color;
+
+	-- Sets the background color of a window:
+	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color) is
+	begin
+		This.Background_Color := Color;
+	end Set_Background_Color;
+
+	-- Expose handlers for windows:
+	procedure Expose_Handler(This : in Window_Record; Graphics_Context : in Graphics.Context) is
+		Entire_Window : constant Primitives.Rectangle := ((0, 0), This.Get_Size);
+	begin
+		Graphics_Context.Fill(This.Get_Background_Color, Entire_Window);
+	end Expose_Handler;
+
+	-- Resize handler for windows:
+	procedure Resize_Handler(This : in out Window_Record; New_Size : in Primitives.Dimension) is
+	begin
+		This.Size := New_Size;
+		This.Graphics_Context.Set_Size(New_Size);
+	end Resize_Handler;
+
 	-- Mouse event handler:
 	function Mouse_Handler(This : in Window_Record; Mouse_Event : in Events.Mouse_Event_Record)
 		return Boolean is
@@ -141,7 +169,7 @@ package body Cupcake.Windows is
 	-- Posts an expose event to a window:
 	procedure Post_Expose(ID : in Window_ID_Type) is
 		use Cupcake.Events;
-		Target : Window := Find_Window_By_ID(ID);
+		Target : constant Window := Find_Window_By_ID(ID);
 	begin
 		if Debug_Mode then
 			Ada.Text_IO.Put_Line("Expose event received for window"
@@ -151,8 +179,7 @@ package body Cupcake.Windows is
 		if Target = null then
 			Ada.Text_IO.Put_Line("Invalid window ID" & Window_ID_Type'Image(ID));
 		else
-		--	Target.Expose_Handler;
-			null;
+			Target.Expose_Handler(Target.Graphics_Context);
 		end if;
 	end Post_Expose;
 

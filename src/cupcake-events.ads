@@ -57,7 +57,7 @@ package Cupcake.Events is
 
 	-- Event handlers included in the Event_Receiver interface:
 	procedure Expose_Handler(This : in Event_Receiver; Graphics_Context : in Graphics.Context) is abstract;
-	procedure Resize_Handler(This : in Event_Receiver; New_Size : in Primitives.Dimension) is abstract;
+	procedure Resize_Handler(This : in out Event_Receiver; New_Size : in Primitives.Dimension) is abstract;
 	function Mouse_Handler(This : in Event_Receiver; Mouse_Event : in Mouse_Event_Record)
 		return Boolean is abstract; -- Returns false if the event should not propagate to child objects.
 	function Keyboard_Handler(This : in Event_Receiver; Keyboard_Event : in Keyboard_Event_Record)

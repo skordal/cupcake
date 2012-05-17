@@ -2,9 +2,6 @@
 Cupcake Manual Pages
 (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 Report bugs and issues on <http://github.com/skordal/cupcake/issues>
-
-A note on some of the methods below; these are not identical to the
-methods in the code, but modified for simplicity.
 =end comment
 
 =head1 NAME
@@ -40,17 +37,25 @@ visible on the screen, it is closed and then destroyed.
 
 =head1 WINDOW OPERATIONS
 
-	procedure Show(This : in Window)
+	procedure Show(This : in Window_Record'Class)
 
 Shows the specified window on the screen.
 
-	procedure Close(This : in Window)
+	procedure Close(This : in Window_Record'Class)
 
 Closes the specified window. Closed windows receive no events.
 
-	function Get_Size(This : in Window) return Primitives.Dimension;
+	function Get_Size(This : in Window_Record'Clas) return Primitives.Dimension;
 
 Gets the window size as a C<Primitives.Dimension> object.
+
+	function Get_Background_Color(This : in Window_Record'Class) return Colors.Color;
+
+Gets the background color of the window.
+
+	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color);
+
+Sets the background color of the window.
 
 =head1 AUTHOR
 

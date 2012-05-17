@@ -20,16 +20,10 @@ package Cupcake.Primitives is
 			Size : Dimension;
 		end record;
 	
-	-- Circle type:
-	type Circle is record
-			Center : Point;
-			Radius : Float;
-		end record;
-	
 	-- Line type:
 	type Line is record
-			Origin : Point;
-			End_Point : Point;
+			Start : Point;
+			Endpoint : Point;
 		end record;
 
 end Cupcake.Primitives;

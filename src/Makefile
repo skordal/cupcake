@@ -13,6 +13,7 @@ SOURCE_FILES := \
 
 # Ada specification files to build:
 SPEC_FILES := \
+	cupcake-colors.ads \
 	cupcake-events.ads \
 	cupcake-primitives.ads
 

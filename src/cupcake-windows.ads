@@ -3,8 +3,10 @@
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
 with Ada.Finalization;
-with Cupcake.Primitives;
+
+with Cupcake.Colors;
 with Cupcake.Events;
+with Cupcake.Primitives;
 
 private with Ada.Containers.Doubly_Linked_Lists;
 private with Cupcake.Graphics;
@@ -30,17 +32,17 @@ package Cupcake.Windows is
 	-- Finalizes a window:
 	overriding procedure Finalize(Object : in out Window_Record);
 
-	-- Shows a window. This procedure sends a Window_Shown event to the window.
+	-- Window operations:
 	procedure Show(This : in Window_Record'Class);
-	pragma Inline(Show);
-
-	-- Closes a window. This procedure sends a Window_Closing event to the window.
 	procedure Close(This : in Window_Record'Class);
-	pragma Inline(Close);
+	pragma Inline(Show, Close);
 
-	-- Window size operations:
 	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension;
 	pragma Inline(Get_Size);
+
+	function Get_Background_Color(This : in Window_Record'Class) return Colors.Color;
+	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color);
+	pragma Inline(Get_Background_Color, Set_Background_Color);
 
 	-- Gets the window ID:
 	function Get_ID(This : in Window_Record'Class) return Window_ID_Type;
@@ -55,12 +57,14 @@ private
 	type Window_Record is new Finalization.Limited_Controlled and Events.Window_Event_Receiver with record
 			Window_ID : Window_ID_Type;
 			Size : Primitives.Dimension;
+			Background_Color : Colors.Color := Colors.DEFAULT_BACKGROUND_COLOR;
+			Graphics_Context : Graphics.Context;
 			Backend_Data : Backend_Data_Ptr;
 		end record;
 
 	-- Event handlers for windows:
-	procedure Expose_Handler(This : in Window_Record; Graphics_Context : in Graphics.Context) is null;
-	procedure Resize_Handler(This : in Window_Record; New_Size : in Primitives.Dimension) is null;
+	procedure Expose_Handler(This : in Window_Record; Graphics_Context : in Graphics.Context);
+	procedure Resize_Handler(This : in out Window_Record; New_Size : in Primitives.Dimension);
 	function Mouse_Handler(This : in Window_Record; Mouse_Event : in Events.Mouse_Event_Record)
 		return Boolean;
 	function Keyboard_Handler(This : in Window_Record; Keyboard_Event : in Events.Keyboard_Event_Record)

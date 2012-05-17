@@ -13,6 +13,7 @@
 #include <cairo/cairo.h>
 
 #include "backend.h"
+#include "graphics.h"
 
 static xcb_connection_t * connection = NULL;
 static xcb_screen_t * screen = NULL;
@@ -215,6 +216,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 			case XCB_EXPOSE:
 				expose_event = (xcb_expose_event_t *) event;
 				post_expose(expose_event->window);
+				xcb_flush(connection);
 				break;
 			case XCB_CLIENT_MESSAGE:
 				client_message_event = (xcb_client_message_event_t *) event;
@@ -231,6 +233,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 				// Ignore unexpected events.
 				break;
 		}
+
 		free(event);
 	}
 
@@ -238,4 +241,20 @@ void * backend_event_thread(void * unused __attribute((unused)))
 
 	return NULL;
 }
+
+// Sets the color for the specified window's cairo context:
+void backend_set_color(void * window, double r, double g, double b)
+{
+	cairo_t * cairo_context = ((backend_window_t *) window)->cairo_context;
+	cairo_set_source_rgb(cairo_context, r, g, b);
+}
+
+// Fills the area specified:
+void backend_fill_rectangle(void * window, int x, int y, int w, int h)
+{
+	cairo_t * cairo_context = ((backend_window_t *) window)->cairo_context;
+	cairo_rectangle(cairo_context, x, y, w, h);
+	cairo_fill(cairo_context);
+}
+
 
