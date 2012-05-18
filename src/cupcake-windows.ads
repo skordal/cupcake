@@ -2,20 +2,18 @@
 -- (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
-with Ada.Finalization;
-
 with Cupcake.Colors;
 with Cupcake.Events;
+with Cupcake.Layouts;
 with Cupcake.Primitives;
 
 private with Ada.Containers.Doubly_Linked_Lists;
 private with Cupcake.Graphics;
 
 package Cupcake.Windows is
-	use Ada;
 
 	-- Normal window type:
-	type Window_Record (<>) is new Finalization.Limited_Controlled and Events.Window_Event_Receiver with private;
+	type Window_Record (<>) is new Events.Window_Event_Receiver with private;
 	type Window is access all Window_Record'Class;
 
 	-- Type used for window IDs:
@@ -29,9 +27,6 @@ package Cupcake.Windows is
 	-- Destroys a window:
 	procedure Destroy(Object : not null access Window_Record);
 
-	-- Finalizes a window:
-	overriding procedure Finalize(Object : in out Window_Record);
-
 	-- Window operations:
 	procedure Show(This : in Window_Record'Class);
 	procedure Close(This : in Window_Record'Class);
@@ -44,6 +39,10 @@ package Cupcake.Windows is
 	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color);
 	pragma Inline(Get_Background_Color, Set_Background_Color);
 
+	procedure Set_Layout(This : out Window_Record'Class; Layout : in Layouts.Layout);
+	function Get_Layout(This : in Window_Record'Class) return Layouts.Layout;
+	pragma Inline(Set_Layout, Get_Layout);
+
 	-- Gets the window ID:
 	function Get_ID(This : in Window_Record'Class) return Window_ID_Type;
 	pragma Inline(Get_ID);
@@ -54,16 +53,17 @@ private
 	Window_List : Window_Lists.List;
 
 	-- Normal window type definition:
-	type Window_Record is new Finalization.Limited_Controlled and Events.Window_Event_Receiver with record
+	type Window_Record is new Events.Window_Event_Receiver with record
 			Window_ID : Window_ID_Type;
 			Size : Primitives.Dimension;
 			Background_Color : Colors.Color := Colors.DEFAULT_BACKGROUND_COLOR;
 			Graphics_Context : Graphics.Context;
 			Backend_Data : Backend_Data_Ptr;
+			Layout : Layouts.Layout := null;
 		end record;
 
 	-- Event handlers for windows:
-	procedure Expose_Handler(This : in Window_Record; Graphics_Context : in Graphics.Context);
+	procedure Expose_Handler(This : in out Window_Record; Graphics_Context : in Graphics.Context);
 	procedure Resize_Handler(This : in out Window_Record; New_Size : in Primitives.Dimension);
 	function Mouse_Handler(This : in Window_Record; Mouse_Event : in Events.Mouse_Event_Record)
 		return Boolean;

@@ -29,11 +29,15 @@ package Cupcake.Fonts is
 		Size : in Font_Size_Type) return Font;
 	
 	-- Frees a font:
-	--procedure Destroy(Object : not null access Font_Record);
+	procedure Destroy(Object : not null access Font_Record);
 
 	-- Gets the backend data pointer for a font object:
 	function Get_Backend_Data(This : in Font_Record'Class) return Backend_Data_Ptr;
 	pragma Inline(Get_Backend_Data);
+
+	-- Gets the size of a font:
+	function Get_Size(This : in Font_Record'Class) return Font_Size_Type;
+	pragma Inline(Get_Size);
 
 private
 	-- Font type definition:

@@ -34,7 +34,7 @@ package Cupcake.Graphics is
 		Shape : in Primitives.Rectangle);
 
 	-- Renders a string of text:
-	procedure Render_Text(This : in Context_Record'Class; Color : in Colors.Color;
+	procedure Render_String(This : in Context_Record'Class; Color : in Colors.Color;
 		Text : in String; Font : in Fonts.Font; Position : in Primitives.Point);
 
 	-- Gets the length (in pixels) of a string:

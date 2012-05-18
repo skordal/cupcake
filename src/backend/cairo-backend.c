@@ -217,8 +217,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 	xcb_client_message_event_t * client_message_event;
 
 	running = true;
-
-	printf("Started event thread.\n");
+	printf("[backend_event_thread] started event thread.\n");
 
 	while((event = xcb_wait_for_event(connection)) != NULL)
 	{
@@ -248,8 +247,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 		free(event);
 	}
 
-	printf("Stopping event thread.\n");
-
+	printf("[backend_event_thread] stopping event thread\n");
 	return NULL;
 }
 
@@ -332,7 +330,7 @@ double backend_string_length(void * window, void * font, const char * text)
 
 	cairo_select_font_face(((backend_window_t *) window)->cairo_context,
 		fnt->family, fnt->style, fnt->weight);
-	cairo_text_extends(((backend_window_t *) window)->cairo_context, text, &length_info);
+	cairo_text_extents(((backend_window_t *) window)->cairo_context, text, &length_info);
 
 	return length_info.width;
 }

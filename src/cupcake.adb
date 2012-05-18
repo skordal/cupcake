@@ -19,6 +19,7 @@ package body Cupcake is
 		if Backend_Initialize = 0 then
 			raise Initialization_Error with "could not initialize backend";
 		end if;
+
 	end Initialize;
 
 	-- Finalizes Cupcake:

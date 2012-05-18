@@ -6,8 +6,6 @@ with Ada.Text_IO;
 with Ada.Unchecked_Deallocation;
 with Interfaces.C.Strings;
 
-with Cupcake.Fonts;
-
 package body Cupcake.Windows is
 	package C renames Interfaces.C;
 
@@ -57,6 +55,8 @@ package body Cupcake.Windows is
 
 	-- Destroys a window:
 	procedure Destroy(Object : not null access Window_Record) is
+		use Cupcake.Layouts;
+
 		-- Deallocation procedure for window records:
 		type Window_Access is access all Window_Record;
 		procedure Free is new Ada.Unchecked_Deallocation(Object => Window_Record,
@@ -64,15 +64,14 @@ package body Cupcake.Windows is
 
 		Win : Window_Access := Window_Access(Object);
 	begin
+		if Object.Layout /= null then
+			Layouts.Destroy(Object.Layout);
+		end if;
+
 		Object.Close;
+		Backend_Window_Finalize(Object.Backend_Data);
 		Free(Win);
 	end Destroy;
-
-	-- Finalizes a window:
-	overriding procedure Finalize(Object : in out Window_Record) is
-	begin
-		Backend_Window_Finalize(Object.Backend_Data);
-	end Finalize;
 
 	-- Shows a window:
 	procedure Show(This : in Window_Record'Class) is
@@ -110,18 +109,42 @@ package body Cupcake.Windows is
 		This.Background_Color := Color;
 	end Set_Background_Color;
 
+	-- Sets the layout of a window:
+	procedure Set_Layout(This : out Window_Record'Class; Layout : in Layouts.Layout) is
+	begin
+		This.Layout := Layout;
+	end Set_Layout;
+
+	-- Gets the layout of a window:
+	function Get_Layout(This : in Window_Record'Class) return Layouts.Layout is
+	begin
+		return This.Layout;
+	end Get_Layout;
+
 	-- Expose handlers for windows:
-	procedure Expose_Handler(This : in Window_Record; Graphics_Context : in Graphics.Context) is
+	procedure Expose_Handler(This : in out Window_Record; Graphics_Context : in Graphics.Context) is
+		use Cupcake.Layouts;
 		Entire_Window : constant Primitives.Rectangle := ((0, 0), This.Get_Size);
 	begin
 		Graphics_Context.Fill(This.Get_Background_Color, Entire_Window);
+		if This.Layout /= null then
+			if Debug_Mode then
+				Ada.Text_IO.Put_Line(
+					"[Window_Record => Expose_Handler] Propagating expose event to layout");
+			end if;
+			This.Layout.Expose_Handler(Graphics_Context);
+		end if;
 	end Expose_Handler;
 
 	-- Resize handler for windows:
 	procedure Resize_Handler(This : in out Window_Record; New_Size : in Primitives.Dimension) is
+		use Cupcake.Layouts;
 	begin
 		This.Size := New_Size;
 		This.Graphics_Context.Set_Size(New_Size);
+		if This.Layout /= null then
+			This.Layout.Resize_Handler(New_Size);
+		end if;
 	end Resize_Handler;
 
 	-- Mouse event handler:

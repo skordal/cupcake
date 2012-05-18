@@ -8,8 +8,10 @@ include ../config.mk
 # Ada source files to build:
 SOURCE_FILES := \
 	cupcake.adb \
+	cupcake-components.adb \
 	cupcake-fonts.adb \
 	cupcake-graphics.adb \
+	cupcake-layouts.adb \
 	cupcake-primitives.adb \
 	cupcake-windows.adb
 

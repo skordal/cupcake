@@ -84,7 +84,7 @@ package body Cupcake.Graphics is
 	end Fill;
 
 	-- Renders a string of text:
-	procedure Render_Text(This : in Context_Record'Class; Color : in Colors.Color;
+	procedure Render_String(This : in Context_Record'Class; Color : in Colors.Color;
 		Text : in String; Font : in Fonts.Font; Position : in Primitives.Point) is
 		use Cupcake.Primitives;
 		Translated_Position : constant Primitives.Point := This.Translation + Position;
@@ -95,7 +95,7 @@ package body Cupcake.Graphics is
 			Translated_Position.Y, C_Text);
 
 		Interfaces.C.Strings.Free(C_Text);
-	end Render_Text;
+	end Render_String;
 
 	-- Gets the length of a string:
 	function Get_String_Length(This : in Context_Record'Class; Text : in String;
