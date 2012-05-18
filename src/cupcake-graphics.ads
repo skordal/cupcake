@@ -4,6 +4,7 @@
 
 with Cupcake.Colors;
 with Cupcake.Primitives;
+with Cupcake.Fonts;
 
 package Cupcake.Graphics is
 
@@ -31,6 +32,10 @@ package Cupcake.Graphics is
 	-- Graphics context drawing operations:
 	procedure Fill(This : in Context_Record'Class; Color : in Colors.Color;
 		Shape : in Primitives.Rectangle);
+
+	-- Renders a string of text:
+	procedure Render_Text(This : in Context_Record'Class; Color : in Colors.Color;
+		Text : in String; Font : in Fonts.Font; Position : in Primitives.Point);
 
 private
 

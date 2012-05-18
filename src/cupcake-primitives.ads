@@ -9,6 +9,9 @@ package Cupcake.Primitives is
 			X, Y : Integer;
 		end record;
 
+	-- Operator for adding points; adds the components together:
+	function "+" (Left, Right : in Point) return Point;
+
 	-- Type for specifying dimensions:
 	type Dimension is record
 			Width, Height : Natural;

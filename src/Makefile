@@ -8,14 +8,15 @@ include ../config.mk
 # Ada source files to build:
 SOURCE_FILES := \
 	cupcake.adb \
+	cupcake-fonts.adb \
 	cupcake-graphics.adb \
+	cupcake-primitives.adb \
 	cupcake-windows.adb
 
 # Ada specification files to build:
 SPEC_FILES := \
 	cupcake-colors.ads \
-	cupcake-events.ads \
-	cupcake-primitives.ads
+	cupcake-events.ads
 
 # Object files to build:
 OBJECT_FILES := $(SOURCE_FILES:.adb=.o) $(SPEC_FILES:.ads=.o) \

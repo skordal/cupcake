@@ -12,6 +12,7 @@ What is its current status?
 Cupcake's current capabilities are:
 * Can show windows, and even fill their backgrounds with pretty colours.
 * Can close windows, which is a pretty nice feature to have.
+* Can draw text using Cairo's "toy" font backend, which is good enough for now.
 * ...but cannot really do anything else.
 * Also has some rudimentary man-pages.
 

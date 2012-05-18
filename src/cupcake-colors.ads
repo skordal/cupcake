@@ -20,7 +20,7 @@ package Cupcake.Colors is
 	GREEN	: constant Color := (0.0, 1.0, 0.0);
 	BLUE	: constant Color := (0.0, 0.0, 1.0);
 
-	DEFAULT_BACKGROUND_COLOR : constant Color := (0.8, 0.8, 0.8);
+	DEFAULT_BACKGROUND_COLOR : constant Color := (0.85, 0.85, 0.85);
 
 end Cupcake.Colors;
 

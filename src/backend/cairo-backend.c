@@ -2,6 +2,8 @@
 // (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 // Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
+// Windowing backend using XCB and Cairo.
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,6 +15,7 @@
 #include <cairo/cairo.h>
 
 #include "backend.h"
+#include "fonts.h"
 #include "graphics.h"
 
 static xcb_connection_t * connection = NULL;
@@ -37,6 +40,14 @@ typedef struct {
 	cairo_surface_t * cairo_surface;
 	cairo_t * cairo_context;
 } backend_window_t;
+
+// Backend specific font data:
+typedef struct {
+	const char * family;
+	cairo_font_slant_t style;
+	cairo_font_weight_t weight;
+	double size;
+} backend_font_t;
 
 // Initializes the backend:
 bool backend_initialize()
@@ -257,4 +268,59 @@ void backend_fill_rectangle(void * window, int x, int y, int w, int h)
 	cairo_fill(cairo_context);
 }
 
+// Allocates a new font:
+void * backend_new_font(backend_font_family_t family, backend_font_style_t style, double size)
+{
+	backend_font_t * retval = malloc(sizeof(backend_font_t));
+	retval->size = size;
+
+	switch(family)
+	{
+		case FAMILY_SERIF:
+			retval->family = "serif";
+			break;
+		case FAMILY_SANS_SERIF:
+			retval->family = "sans-serif";
+			break;
+		case FAMILY_MONOSPACE:
+			retval->family = "monospace";
+			break;
+
+	}
+
+	switch(style)
+	{
+		case STYLE_PLAIN:
+			retval->style = CAIRO_FONT_SLANT_NORMAL;
+			retval->weight = CAIRO_FONT_WEIGHT_NORMAL;
+			break;
+		case STYLE_ITALIC:
+			retval->style = CAIRO_FONT_SLANT_ITALIC;
+			retval->weight = CAIRO_FONT_WEIGHT_NORMAL;
+		case STYLE_BOLD:
+			retval->style = CAIRO_FONT_SLANT_NORMAL;
+			retval->weight = CAIRO_FONT_WEIGHT_BOLD;
+			break;
+	}
+
+	return retval;
+}
+
+// Frees a previously allocated font:
+void backend_free_font(void * font)
+{
+	free(font);
+}
+
+// Renders text with the specified attributes:
+void backend_render_string(void * window, void * font, int x, int y, const char * text)
+{
+	backend_window_t * win = (backend_window_t *) window;
+	backend_font_t * fnt = (backend_font_t *) font;
+
+	cairo_select_font_face(win->cairo_context, fnt->family, fnt->style, fnt->weight);
+	cairo_set_font_size(win->cairo_context, fnt->size);
+	cairo_move_to(win->cairo_context, x, y);
+	cairo_show_text(win->cairo_context, text);
+}
 
