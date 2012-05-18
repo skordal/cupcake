@@ -17,7 +17,6 @@ clean:
 	-$(RM) $(MANPAGES)
 
 %.3: %.pod
-	$(M4) $< | $(POD2MAN) -s 3 -q none -c "Cupcake GUI Toolkit Manual" -r "cupcake-0.1" \
-		-n $(shell basename $@ .3) > $@
-
+	$(M4) $< | $(POD2MAN) -s 3 -q none -c 'Cupcake GUI Toolkit Manual' -r 'cupcake-0.1' \
+		-n '$(shell basename $@ .3)' > $@
 
