@@ -3,14 +3,9 @@ Cupcake Manual Pages
 (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 =end comment
+include(header.m4)
 
-=head1 NAME
-
-Cupcake - Cupcake top-level package
-
-=head1 USAGE
-
-	with Cupcake;
+PACKAGE(Cupcake, Cupcake top-level package)
 
 =head1 DESCRIPTION
 
@@ -57,9 +52,5 @@ the exception.
 
 The VERSION_* constants contain the current version of the Cupcake library.
 
-=head1 AUTHOR
-
-The Cupcake toolkit is written by Kristian Klomsten Skordal. New releases
-and bug tracking can be found on its GitHub page, at
-L<http://github.com/skordal/cupcake>.
+include(footer.m4)
 

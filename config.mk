@@ -9,6 +9,7 @@ MAKE    ?= make
 RANLIB  ?= ranlib
 
 # Documentation build tools:
+M4      ?= m4
 POD2MAN ?= pod2man
 
 # Build flags:
