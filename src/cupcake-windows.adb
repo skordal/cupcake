@@ -113,10 +113,8 @@ package body Cupcake.Windows is
 	-- Expose handlers for windows:
 	procedure Expose_Handler(This : in Window_Record; Graphics_Context : in Graphics.Context) is
 		Entire_Window : constant Primitives.Rectangle := ((0, 0), This.Get_Size);
-		Font : Fonts.Font := Fonts.New_Font(Fonts.SANS_SERIF, Fonts.PLAIN, 12.0);
 	begin
 		Graphics_Context.Fill(This.Get_Background_Color, Entire_Window);
-		Graphics_Context.Render_Text(Colors.BLACK, "Test", Font, (0, 12)); -- TODO: Remove me :-)
 	end Expose_Handler;
 
 	-- Resize handler for windows:
