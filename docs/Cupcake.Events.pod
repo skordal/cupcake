@@ -1,0 +1,112 @@
+=for comment
+Cupcake Manual Pages
+(c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
+Report bugs and issues on <http://github.com/skordal/cupcake/issues>
+=end comment
+include(header.m4)
+
+PACKAGE(Cupcake.Events, Event handler interface package)
+
+=head1 DESCRIPTION
+
+The C<Cupcake.Events> package contains interfaces for objects implementing
+event handlers and the prototypes for the event handlers themselves.
+
+=head1 TYPES
+
+	type Button_State_Type is (UP, DOWN);
+
+Type indicating the state of a button that has caused an event.
+
+=head1 KEYBOARD EVENT TYPES
+
+	type Keyboard_Event_Type is (CHARACTER_KEY, SPECIAL_KEY);
+
+Type indicating the type of keyboard event that has occured. A character key
+event is an event where a button has been pressed that has a value which can
+be expressed with the a unicode character. Special keys are keys such as the
+F1 .. F12 keys, arrow keys and other special keys.
+
+	type Modifier_State_Type is record
+			CTRL	: Boolean := false;
+			ALT	: Boolean := false;
+			ALTGR	: Boolean := false;
+			META	: Boolean := false;
+			SHIFT	: Boolean := false;
+		end record;
+
+Type containing the state of the modifier keys.
+
+	type Keyboard_Event_Record (Event_Type : Keyboard_Event_Type) is record
+			Button_State : Button_State_Type := DOWN;
+			Meta_Keys : Modifier_State_Type;
+			case Event_Type is
+				when CHARACTER_KEY =>
+					Key : Character;
+				when SPECIAL_KEY =>
+					Key_Code : Natural;
+			end case;
+		end record;
+
+Type containing information about a C<Keyboard> event. This structure may change at any time.
+
+=head1 MOUSE EVENT TYPES
+
+	type Mouse_Button_Type is (LEFT_BUTTON, MIDDLE_BUTTON, RIGHT_BUTTON);
+
+Type indicating which mouse button has caused a mouse event.
+
+	type Mouse_Event_Type is (MOUSE_MOVE_EVENT, MOUSE_BUTTON_EVENT, MOUSE_ENTER_EVENT, MOUSE_LEAVE_EVENT);
+
+Type indicating the type of a mouse event.
+
+	type Mouse_Event_Record (Event_Type : Mouse_Event_Type) is record
+			Position : Primitives.Point;
+			case Event_Type is
+				when MOUSE_BUTTON_EVENT =>
+					Button_State : Button_State_Type;
+					Button : Mouse_Button_Type;
+				when others =>
+					null;
+			end case;
+		end record;
+
+Type containing information about a C<Mouse> event. This structure may change at any time.
+
+=head1 INTERFACES
+
+	type Event_Receiver is limited interface;
+
+Interface implemented by all objects reacting to events.
+
+	type Window_Event_Receiver is limited interface;
+
+Interface containing a few extra event handlers for window use.
+
+=head1 EVENT HANDLER PROTOTYPES
+
+	procedure Expose_Handler(This : in Event_Receiver; Graphics_Context : in Graphics.Context)
+		is abstract;
+
+Event handler for C<Expose> events. These events are sent to an object if it
+should be redrawn.
+
+	procedure Resize_Handler(This : in out Event_Receiver; New_Size : in Primitives.Dimension)
+		is abstract;
+
+Event handler for C<Resize> events.
+
+	function Mouse_Handler(This : in Event_Receiver; Mouse_Event : in Mouse_Event_Record)
+		return Boolean is abstract;
+
+Event handler for C<Mouse> events. Details about the event is passed in the Mouse_Event
+parameter. If the event is consumed by the object, C<false> should be returned. In that case,
+the event is not sent to any other objects.
+
+	function Keyboard_Handler(This : in Event_Receiver; Keyboard_Event : in Keyboard_Event_Record)
+		return Boolean is abstract;
+
+Event handler for C<Keyboard> events. Details about the vent is passed in the Keyboard_Event
+parameter. If the event is consumed by the object, C<false> should be returned, and the
+event will not be propagated to any other objects.
+

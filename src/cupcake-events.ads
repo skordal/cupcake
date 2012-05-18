@@ -17,7 +17,7 @@ package Cupcake.Events is
 	type Keyboard_Event_Type is (CHARACTER_KEY, SPECIAL_KEY);
 
 	-- Meta key info record:
-	type Meta_Key_Info is record
+	type Modifier_State_Type is record
 			CTRL	: Boolean := false;
 			ALT	: Boolean := false;
 			ALTGR	: Boolean := false;
@@ -28,7 +28,7 @@ package Cupcake.Events is
 	-- Keyboard key event record:
 	type Keyboard_Event_Record (Event_Type : Keyboard_Event_Type) is record
 			Button_State : Button_State_Type := DOWN;
-			Meta_Keys : Meta_Key_Info;
+			Meta_Keys : Modifier_State_Type;
 			case Event_Type is
 				when CHARACTER_KEY =>
 					Key : Character;
