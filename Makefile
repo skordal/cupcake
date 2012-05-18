@@ -6,16 +6,16 @@ include config.mk
 .PHONY: all demos docs clean
 
 all: docs
-	@make -C src all
+	@$(MAKE) -C src all
 
 demos: all
-	@make -C demos all
+	@$(MAKE) -C demos all
 
 docs:
-	@make -C docs all
+	@$(MAKE) -C docs all
 
 clean:
-	@make -C src clean
-	@make -C demos clean
-	@make -C docs clean
+	@$(MAKE) -C src clean
+	@$(MAKE) -C demos clean
+	@$(MAKE) -C docs clean
 

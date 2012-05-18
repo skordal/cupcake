@@ -5,6 +5,7 @@
 # Build tools:
 AR      ?= ar
 GNATCC  ?= gnatgcc
+MAKE    ?= make
 RANLIB  ?= ranlib
 
 # Documentation build tools:
