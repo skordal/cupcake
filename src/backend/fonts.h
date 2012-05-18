@@ -29,5 +29,8 @@ void backend_free_font(void * font);
 // Renders a string of text at the specified position:
 void backend_render_string(void * window, void * font, int x, int y, const char * text);
 
+// Gets the length of a rendered text string:
+double backend_string_length(void * window, void * font, const char * text);
+
 #endif
 

@@ -13,10 +13,13 @@ package body Cupcake.Graphics is
 		X, Y, Width, Height : in Natural);
 	procedure Backend_Render_String(Backend_Data : in Backend_Data_Ptr;
 		Font : Backend_Data_Ptr; X, Y : Natural; Text : Interfaces.C.Strings.chars_ptr);
+	function Backend_String_Length(Backend_Data : in Backend_Data_Ptr;
+		Font : Backend_Data_Ptr; Text : Interfaces.C.Strings.chars_ptr) return Long_Float;
 
 	pragma Import(C, Backend_Set_Color, "backend_set_color");
 	pragma Import(C, Backend_Fill_Rectangle, "backend_fill_rectangle");
 	pragma Import(C, Backend_Render_String, "backend_render_string");
+	pragma Import(C, Backend_String_Length, "backend_string_length");
 
 	-- Creates a new graphics context for a window:
 	function New_Context(Backend_Data : in Backend_Data_Ptr; Size : in Primitives.Dimension)
@@ -93,6 +96,17 @@ package body Cupcake.Graphics is
 
 		Interfaces.C.Strings.Free(C_Text);
 	end Render_Text;
+
+	-- Gets the length of a string:
+	function Get_String_Length(This : in Context_Record'Class; Text : in String;
+		Font : in Fonts.Font) return Natural is
+		C_Text : Interfaces.C.Strings.chars_ptr := Interfaces.C.Strings.New_String(Text);
+		Temp : constant Long_Float := Backend_String_Length(This.Backend_Data, Font.Get_Backend_Data,
+			C_Text);
+	begin
+		Interfaces.C.Strings.Free(C_Text);
+		return Natural(Temp);
+	end Get_String_Length;
 
 end Cupcake.Graphics;
 

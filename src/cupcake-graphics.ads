@@ -37,8 +37,13 @@ package Cupcake.Graphics is
 	procedure Render_Text(This : in Context_Record'Class; Color : in Colors.Color;
 		Text : in String; Font : in Fonts.Font; Position : in Primitives.Point);
 
+	-- Gets the length (in pixels) of a string:
+	function Get_String_Length(This : in Context_Record'Class; Text : in String;
+		Font : in Fonts.Font) return Natural;
+
 private
 
+	-- Graphics context definition:
 	type Context_Record is tagged limited record
 			Parent : Context := null;
 			Translation : Primitives.Point := (0, 0);

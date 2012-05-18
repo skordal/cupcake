@@ -324,3 +324,16 @@ void backend_render_string(void * window, void * font, int x, int y, const char 
 	cairo_show_text(win->cairo_context, text);
 }
 
+// Gets the length of a rendered string:
+double backend_string_length(void * window, void * font, const char * text)
+{
+	cairo_text_extents_t length_info;
+	backend_font_t * fnt = (backend_font_t *) font;
+
+	cairo_select_font_face(((backend_window_t *) window)->cairo_context,
+		fnt->family, fnt->style, fnt->weight);
+	cairo_text_extends(((backend_window_t *) window)->cairo_context, text, &length_info);
+
+	return length_info.width;
+}
+
