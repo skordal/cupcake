@@ -12,6 +12,10 @@ package Cupcake.Colors is
 			R, G, B : Color_Component_Type;
 		end record;
 
+	-- Multiplies all color components of a Color with a constant:
+	function "*" (Left : in Color; Right : in Long_Float) return Color;
+	function "*" (Left : in Long_Float; Right : in Color) return Color;
+
 	-- Predefined color constants:
 	BLACK	: constant Color := (0.0, 0.0, 0.0);
 	WHITE	: constant Color := (1.0, 1.0, 1.0);
