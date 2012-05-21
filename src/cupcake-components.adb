@@ -45,7 +45,6 @@ package body Cupcake.Components is
 			:= (Unbounded_Size.Width, Natural(Default_Font.Get_Size));
 	begin
 		Label_Record(Retval.all).Text := To_Unbounded_String(Text);
-		Label_Record(Retval.all).Size := Size;
 		Label_Record(Retval.all).Minimum_Size := Size;
 		Label_Record(Retval.all).Preferred_Size := Size;
 		Label_Record(Retval.all).Expanding := Expanding;

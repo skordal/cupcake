@@ -15,6 +15,8 @@ package Cupcake.Components is
 	-- expandable:
 	Unbounded_Size : constant Primitives.Dimension := (Natural'Last, Natural'Last);
 
+	---- COMPONENT BASE CLASS ----
+
 	-- Component base type:
 	type Component_Record is abstract new Events.Event_Receiver with private;
 	type Component is access all Component_Record'Class;
@@ -33,6 +35,8 @@ package Cupcake.Components is
 	pragma Inline(Set_Expanding, Get_Expanding);
 
 	function Get_Preferred_Size(This : in Component_Record'Class) return Primitives.Dimension;
+
+	---- LABEL COMPONENT ----
 
 	-- Label component:
 	type Label_Record (<>) is new Component_Record with private;
@@ -55,7 +59,6 @@ private
 			Minimum_Size : Primitives.Dimension := Unbounded_Size;
 			Preferred_Size : Primitives.Dimension := Unbounded_Size;
 			Maximum_Size : Primitives.Dimension := Unbounded_Size;
-			Size : Primitives.Dimension;
 			Expanding : Boolean := false;
 		end record;
 

@@ -51,9 +51,14 @@ package body Cupcake.Layouts is
 
 	-- Handles an expose event for a simple layout:
 	procedure Expose_Handler(This : in out Simple_Layout_Record; Graphics_Context : in Graphics.Context) is
+		use Cupcake.Primitives;
 		Component_Size : Primitives.Dimension := This.Component.Get_Preferred_Size;
 		X_Position, Y_Position : Natural := 0;
 	begin
+		if This.Size = Primitives.Null_Dimension then
+			This.Size := Graphics_Context.Get_Size;
+		end if;
+
 		if This.Component /= null then
 			if This.Component.Get_Expanding then
 				This.Component.Expose_Handler(Graphics_Context);
@@ -71,7 +76,7 @@ package body Cupcake.Layouts is
 				end if;
 
 				This.Component.Expose_Handler(Graphics.New_Context(Graphics_Context,
-					(-X_Position, -Y_Position), Component_Size));
+					(X_Position, Y_Position), Component_Size));
 			end if;
 		end if;
 	end Expose_Handler;

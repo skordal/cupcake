@@ -12,9 +12,9 @@ package body Cupcake.Graphics is
 	procedure Backend_Fill_Rectangle(Backend_Data : in Backend_Data_Ptr;
 		X, Y, Width, Height : in Natural);
 	procedure Backend_Render_String(Backend_Data : in Backend_Data_Ptr;
-		Font : Backend_Data_Ptr; X, Y : Natural; Text : Interfaces.C.Strings.chars_ptr);
+		Font : in Backend_Data_Ptr; X, Y : in Natural; Text : in Interfaces.C.Strings.chars_ptr);
 	function Backend_String_Length(Backend_Data : in Backend_Data_Ptr;
-		Font : Backend_Data_Ptr; Text : Interfaces.C.Strings.chars_ptr) return Long_Float;
+		Font : in Backend_Data_Ptr; Text : in Interfaces.C.Strings.chars_ptr) return Long_Float;
 
 	pragma Import(C, Backend_Set_Color, "backend_set_color");
 	pragma Import(C, Backend_Fill_Rectangle, "backend_fill_rectangle");
@@ -74,7 +74,7 @@ package body Cupcake.Graphics is
 		use Cupcake.Primitives;
 		Translated_Rectangle : Primitives.Rectangle;
 	begin
-		Translated_Rectangle.Origin := Shape.Origin + This.Translation;
+		Translated_Rectangle.Origin := This.Translation + Shape.Origin;
 		Translated_Rectangle.Size := Shape.Size;
 
 		Backend_Set_Color(This.Backend_Data, Color.R, Color.G, Color.B);
