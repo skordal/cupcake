@@ -9,13 +9,17 @@ package Cupcake.Primitives is
 			X, Y : Integer;
 		end record;
 
-	-- Operator for adding points; adds the components together:
+	-- Point operators:
 	function "+" (Left, Right : in Point) return Point;
+	function "-" (Left, Right : in Point) return Point;
 
 	-- Type for specifying dimensions:
 	type Dimension is record
 			Width, Height : Natural;
 		end record;
+
+	-- Null dimension:
+	Null_Dimension : constant Dimension := (0, 0);
 
 	-- Rectangle type:
 	type Rectangle is record

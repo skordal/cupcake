@@ -10,5 +10,11 @@ package body Cupcake.Primitives is
 		return ((Left.X + Right.X), (Left.Y + Right.Y));
 	end "+";
 
+	-- Subtracts two points:
+	function "-" (Left, Right : in Point) return Point is
+	begin
+		return ((Left.X - Right.X), (Left.Y - Right.Y));
+	end "-";
+
 end Cupcake.Primitives;
 
