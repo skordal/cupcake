@@ -2,8 +2,6 @@
 -- (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
-with Cupcake.Colors;
-
 package body Cupcake.Components is
 
 	-- Default mouse handler which ignores mouse events:
@@ -34,6 +32,18 @@ package body Cupcake.Components is
 		return This.Expanding;
 	end Get_Expanding;
 
+	-- Sets the size of a component:
+	procedure Set_Size(This : in out Component_Record'Class; Size : in Primitives.Dimension) is
+	begin
+		This.Resize_Handler(Size);
+	end Set_Size;
+
+	-- Gets the size of a component:
+	function Get_Size(This : in Component_Record'Class) return Primitives.Dimension is
+	begin
+		return This.Size;
+	end Get_Size;
+
 	-- Gets the preferred size of a component:
 	function Get_Preferred_Size(This : in Component_Record'Class) return Primitives.Dimension is
 	begin
@@ -61,16 +71,11 @@ package body Cupcake.Components is
 		Text_Width : constant Natural := Graphics_Context.Get_String_Length(Text_String, Default_Font);
 		X_Offset, Y_Offset : Natural := 0;
 	begin
-		if not This.Expanding then
-			This.Size.Width := Text_Width;
-		end if;
+		This.Size.Width := Text_Width;
+		X_Offset := (Graphics_Context.Get_Size.Width - Text_Width) / 2;
+		Y_Offset := (Graphics_Context.Get_Size.Height - Natural(Default_Font.Get_Size)) / 2;
 
-		if This.Expanding then
-			X_Offset := (Graphics_Context.Get_Size.Width - Text_Width) / 2;
-			Y_Offset := (Graphics_Context.Get_Size.Height - Natural(Default_Font.Get_Size)) / 2;
-		end if;
-
-		Graphics_Context.Render_String(Colors.BLACK, Text_String, Default_Font, 
+		Graphics_Context.Render_String(This.Foreground_Color, Text_String, Default_Font, 
 			(X_Offset, Y_Offset + Natural(Default_Font.Get_Size)));
 	end Expose_Handler;
 

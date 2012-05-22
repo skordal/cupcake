@@ -4,6 +4,7 @@
 
 private with Ada.Strings.Unbounded;
 
+with Cupcake.Colors;
 with Cupcake.Events;
 with Cupcake.Fonts;
 with Cupcake.Graphics;
@@ -34,7 +35,12 @@ package Cupcake.Components is
 	function Get_Expanding(This : in Component_Record'Class) return Boolean;
 	pragma Inline(Set_Expanding, Get_Expanding);
 
+	procedure Set_Size(This : in out Component_Record'Class; Size : in Primitives.Dimension);
+	function Get_Size(This : in Component_Record'Class) return Primitives.Dimension;
+	pragma Inline(Get_Size);
+
 	function Get_Preferred_Size(This : in Component_Record'Class) return Primitives.Dimension;
+	pragma Inline(Get_Preferred_Size);
 
 	---- LABEL COMPONENT ----
 
@@ -59,6 +65,8 @@ private
 			Minimum_Size : Primitives.Dimension := Unbounded_Size;
 			Preferred_Size : Primitives.Dimension := Unbounded_Size;
 			Maximum_Size : Primitives.Dimension := Unbounded_Size;
+			Background_Color : Colors.Color := Colors.DEFAULT_BACKGROUND_COLOR;
+			Foreground_Color : Colors.Color := Colors.DEFAULT_FOREGROUND_COLOR;
 			Size : Primitives.Dimension := (0, 0);
 			Expanding : Boolean := false;
 		end record;
