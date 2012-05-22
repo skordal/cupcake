@@ -42,7 +42,7 @@ package Cupcake.Components is
 	type Label_Record (<>) is new Component_Record with private;
 
 	-- Creates a new label:
-	function New_Label(Text : in String; Expanding : Boolean := true) return Component;
+	function New_Label(Text : in String; Expanding : in Boolean := false) return Component;
 
 	-- Expose handler for the label:
 	overriding procedure Expose_Handler(This : in out Label_Record; Graphics_Context : in Graphics.Context);
@@ -59,6 +59,7 @@ private
 			Minimum_Size : Primitives.Dimension := Unbounded_Size;
 			Preferred_Size : Primitives.Dimension := Unbounded_Size;
 			Maximum_Size : Primitives.Dimension := Unbounded_Size;
+			Size : Primitives.Dimension := (0, 0);
 			Expanding : Boolean := false;
 		end record;
 

@@ -39,14 +39,15 @@ package body Cupcake.Components is
 	end Get_Preferred_Size;
 
 	-- Creates a new label component:
-	function New_Label(Text : in String; Expanding : Boolean := true) return Component is
+	function New_Label(Text : in String; Expanding : in Boolean := false) return Component is
 		Retval : constant Component := new Label_Record;
-		Size : constant Primitives.Dimension
-			:= (Unbounded_Size.Width, Natural(Default_Font.Get_Size));
+		Size : constant Primitives.Dimension := (Integer(Default_Font.Get_Size) * Text'Length,
+			Integer(Default_Font.Get_Size));
 	begin
 		Label_Record(Retval.all).Text := To_Unbounded_String(Text);
 		Label_Record(Retval.all).Minimum_Size := Size;
 		Label_Record(Retval.all).Preferred_Size := Size;
+		Label_Record(Retval.all).Size := Size;
 		Label_Record(Retval.all).Expanding := Expanding;
 
 		return Retval;
@@ -56,11 +57,17 @@ package body Cupcake.Components is
 	procedure Expose_Handler(This : in out Label_Record; Graphics_Context : in Graphics.Context) is
 		Text_String : constant String := To_String(This.Text);
 		Text_Width : constant Natural := Graphics_Context.Get_String_Length(Text_String, Default_Font);
-		X_Offset, Y_Offset : Natural;
+		X_Offset, Y_Offset : Natural := 0;
 	begin
-		X_Offset := (Graphics_Context.Get_Size.Width - Text_Width) / 2;
-		Y_Offset := (Graphics_Context.Get_Size.Height - Natural(Default_Font.Get_Size)) / 2;
-	
+		if not This.Expanding then
+			This.Size.Width := Text_Width;
+		end if;
+
+		if This.Expanding then
+			X_Offset := (Graphics_Context.Get_Size.Width - Text_Width) / 2;
+			Y_Offset := (Graphics_Context.Get_Size.Height - Natural(Default_Font.Get_Size)) / 2;
+		end if;
+
 		Graphics_Context.Render_String(Colors.BLACK, Text_String, Default_Font, 
 			(X_Offset, Y_Offset + Natural(Default_Font.Get_Size)));
 	end Expose_Handler;
