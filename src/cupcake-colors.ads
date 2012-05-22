@@ -5,7 +5,7 @@
 package Cupcake.Colors is
 
 	-- Color component type:
-	subtype Color_Component_Type is Long_Float range 0.0 .. 1.0;
+	subtype Color_Component_Type is Float range 0.0 .. 1.0;
 
 	-- Color type:
 	type Color is record
@@ -13,8 +13,8 @@ package Cupcake.Colors is
 		end record;
 
 	-- Multiplies all color components of a Color with a constant:
-	function "*" (Left : in Color; Right : in Long_Float) return Color;
-	function "*" (Left : in Long_Float; Right : in Color) return Color;
+	function "*" (Left : in Color; Right : in Float) return Color;
+	function "*" (Left : in Float; Right : in Color) return Color;
 
 	-- Predefined color constants:
 	BLACK	: constant Color := (0.0, 0.0, 0.0);
@@ -25,6 +25,7 @@ package Cupcake.Colors is
 	BLUE	: constant Color := (0.0, 0.0, 1.0);
 
 	DEFAULT_BACKGROUND_COLOR : constant Color := (0.85, 0.85, 0.85);
+	DEFAULT_FOREGROUND_COLOR : constant Color := BLUE;
 
 end Cupcake.Colors;
 

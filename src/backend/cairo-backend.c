@@ -259,10 +259,20 @@ void * backend_event_thread(void * unused __attribute((unused)))
 }
 
 // Sets the color for the specified window's cairo context:
-void backend_set_color(void * window, double r, double g, double b)
+void backend_set_color(void * window, float r, float g, float b)
 {
 	cairo_t * cairo_context = ((backend_window_t *) window)->cairo_context;
 	cairo_set_source_rgb(cairo_context, r, g, b);
+}
+
+// Draws a line:
+void backend_draw_line(void * window, int x1, int y1, int x2, int y2, float line_width)
+{
+	cairo_t * cairo_context = ((backend_window_t *) window)->cairo_context;
+	cairo_set_line_width(cairo_context, line_width);
+	cairo_move_to(cairo_context, x1, y1);
+	cairo_line_to(cairo_context, x2, y2);
+	cairo_stroke(cairo_context);
 }
 
 // Fills the area specified:

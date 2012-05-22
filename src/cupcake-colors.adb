@@ -5,7 +5,7 @@
 package body Cupcake.Colors is
 
 	-- Multiplies the components of a color with a constant:
-	function "*" (Left : in Color; Right : in Long_Float) return Color is
+	function "*" (Left : in Color; Right : in Float) return Color is
 		Retval : Color;
 	begin
 		Retval.R := Left.R * Right;
@@ -15,7 +15,7 @@ package body Cupcake.Colors is
 	end "*";
 
 	-- Multiplies the components of a color with a constant:
-	function "*" (Left : in Long_Float; Right : in Color) return Color is
+	function "*" (Left : in Float; Right : in Color) return Color is
 	begin
 		return Right * Left;
 	end "*";

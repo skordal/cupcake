@@ -29,6 +29,10 @@ package Cupcake.Graphics is
 	function Get_Size(This : in Context_Record'Class) return Primitives.Dimension;
 	pragma Inline(Set_Size, Get_Size);
 
+	-- Draws a line from A to B:
+	procedure Draw_Line(This : in Context_Record'Class; Color: in Colors.Color;
+		A, B : in Primitives.Point; Line_Width : in Float := 1.0);
+
 	-- Graphics context drawing operations:
 	procedure Fill(This : in Context_Record'Class; Color : in Colors.Color;
 		Shape : in Primitives.Rectangle);

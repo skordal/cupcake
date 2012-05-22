@@ -8,7 +8,9 @@ with Interfaces.C.Strings;
 package body Cupcake.Graphics is
 	-- Available backend methods:
 	procedure Backend_Set_Color(Backend_Data : in Backend_Data_Ptr;
-		R, G, B : in Long_Float);
+		R, G, B : in Colors.Color_Component_Type);
+	procedure Backend_Draw_Line(Backend_Data : in Backend_Data_Ptr;
+		X1, Y1, X2, Y2 : in Natural; Line_Width : in Float);
 	procedure Backend_Fill_Rectangle(Backend_Data : in Backend_Data_Ptr;
 		X, Y, Width, Height : in Natural);
 	procedure Backend_Render_String(Backend_Data : in Backend_Data_Ptr;
@@ -17,6 +19,7 @@ package body Cupcake.Graphics is
 		Font : in Backend_Data_Ptr; Text : in Interfaces.C.Strings.chars_ptr) return Long_Float;
 
 	pragma Import(C, Backend_Set_Color, "backend_set_color");
+	pragma Import(C, Backend_Draw_Line, "backend_draw_line");
 	pragma Import(C, Backend_Fill_Rectangle, "backend_fill_rectangle");
 	pragma Import(C, Backend_Render_String, "backend_render_string");
 	pragma Import(C, Backend_String_Length, "backend_string_length");
@@ -67,6 +70,18 @@ package body Cupcake.Graphics is
 	begin
 		return This.Size;
 	end Get_Size;
+
+	-- Draws a line from A to B:
+	procedure Draw_Line(This : in Context_Record'Class; Color : in Colors.Color;
+		A, B : in Primitives.Point; Line_Width : in Float := 1.0) is
+		use Cupcake.Primitives;
+		Translated_A : constant Primitives.Point := A + This.Translation;
+		Translated_B : constant Primitives.Point := B + This.Translation;
+	begin
+		Backend_Set_Color(This.Backend_Data, Color.R, Color.G, Color.B);
+		Backend_Draw_Line(This.Backend_Data, Translated_A.X, Translated_A.Y,
+			Translated_B.X, Translated_B.Y, Line_Width);
+	end Draw_Line;
 
 	-- Fills a rectangle with the specified color:
 	procedure Fill(This : in Context_Record'Class; Color : in Colors.Color;
