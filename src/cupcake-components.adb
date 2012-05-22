@@ -9,6 +9,7 @@ package body Cupcake.Components is
 	-- Default mouse handler which ignores mouse events:
 	function Mouse_Handler(This : in Component_Record; Mouse_Event : in Events.Mouse_Event_Record)
 		return Boolean is
+		pragma Unreferenced(This, Mouse_Event);
 	begin
 		return true;
 	end Mouse_Handler;
@@ -16,6 +17,7 @@ package body Cupcake.Components is
 	-- Default keyboard handler which ignores keyboard events:
 	function Keyboard_Handler(This : in Component_Record; Keyboard_Event : in Events.Keyboard_Event_Record)
 		return Boolean is
+		pragma Unreferenced(This, Keyboard_Event);
 	begin
 		return true;
 	end Keyboard_Handler;
