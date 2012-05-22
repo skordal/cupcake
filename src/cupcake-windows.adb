@@ -142,7 +142,12 @@ package body Cupcake.Windows is
 	begin
 		This.Size := New_Size;
 		This.Graphics_Context.Set_Size(New_Size);
+
 		if This.Layout /= null then
+			if Debug_Mode then
+				Ada.Text_IO.Put_Line(
+					"[Window_Record => Resize_Handler] Propagating resize event to layout");
+			end if;
 			This.Layout.Resize_Handler(New_Size);
 		end if;
 	end Resize_Handler;
@@ -208,6 +213,22 @@ package body Cupcake.Windows is
 		end if;
 	end Post_Expose;
 
+	-- Posts a resize event to a window:
+	procedure Post_Resize(ID : in Window_ID_Type; Width, Height : in Natural) is
+		Target : constant Window := Find_Window_By_ID(ID);
+	begin
+		if Debug_Mode then
+			Ada.Text_IO.Put_Line("Resize event received for window " & Window_ID_Type'Image(ID)
+				& " with width " & Natural'Image(Width) & " and height " & Natural'Image(Height));
+		end if;
+	
+		if Target = null then
+			Ada.Text_IO.Put_Line("Invalid window ID" & Window_ID_Type'Image(ID));
+		else
+			Target.Resize_Handler((Width, Height));
+		end if;
+	end Post_Resize;
+
 	-- Posts a window close event to a window:
 	function Post_Window_Close(ID : in Window_ID_Type) return Integer is
 		use Cupcake.Events;
@@ -215,8 +236,10 @@ package body Cupcake.Windows is
 		Target_Cursor : Window_Lists.Cursor := Window_List.Find(Target);
 		Closing : Boolean := false;
 	begin
-		Ada.Text_IO.Put_Line("Window close event received for window"
-			& Window_ID_Type'Image(ID));
+		if Debug_Mode then
+			Ada.Text_IO.Put_Line("Window close event received for window"
+				& Window_ID_Type'Image(ID));
+		end if;
 	
 		if Target = null or not Window_Lists.Has_Element(Target_Cursor) then
 			Ada.Text_IO.Put_Line("Invalid window ID or not visible window: "

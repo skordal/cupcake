@@ -188,7 +188,8 @@ void backend_window_close(void * window)
 	{
 		xcb_unmap_window(connection, ((backend_window_t *) window)->window_id);
 		xcb_flush(connection);
-	}
+	} else
+		return;
 
 	if(get_num_windows_remaining() == 0)
 		backend_main_loop_terminate();
@@ -214,6 +215,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 {
 	xcb_generic_event_t * event;
 	xcb_expose_event_t * expose_event;
+	xcb_configure_notify_event_t * notify_event;
 	xcb_client_message_event_t * client_message_event;
 
 	running = true;
@@ -221,6 +223,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 
 	while((event = xcb_wait_for_event(connection)) != NULL)
 	{
+		backend_window_t * window_data;
 		switch(event->response_type & ~0x80)
 		{
 			case XCB_EXPOSE:
@@ -235,10 +238,14 @@ void * backend_event_thread(void * unused __attribute((unused)))
 				// to the window and closes the window if allowed. If such a message
 				// is sent here, the window will not get closed, just removed from
 				// the list of open windows.
-				backend_window_t * window_data = get_backend_data_for_window_by_id(
-					client_message_event->window);
+				window_data = get_backend_data_for_window_by_id(client_message_event->window);
 				if(window_data != NULL)
 					backend_window_close(window_data);
+				break;
+			case XCB_CONFIGURE_NOTIFY:
+				notify_event = (xcb_configure_notify_event_t *) event;
+				post_resize(notify_event->window, notify_event->width, notify_event->height);
+				break;
 			default:
 				// Ignore unexpected events.
 				break;

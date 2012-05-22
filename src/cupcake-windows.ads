@@ -81,9 +81,11 @@ private
 
 	-- Various methods used by the backend code to send events to windows:
 	procedure Post_Expose(ID : in Window_ID_Type);
+	procedure Post_Resize(ID : in Window_ID_Type; Width, Height : in Natural);
 	function Post_Window_Close(ID : in Window_ID_Type) return Integer; -- 1 = close ok | 0 = don't close
 
 	pragma Export(C, Post_Expose);
+	pragma Export(C, Post_Resize);
 	pragma Export(C, Post_Window_Close);
 
 	-- Method called to check if there are remaining windows:

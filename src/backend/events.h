@@ -14,6 +14,7 @@
 
 // Posts an expose event to the specified window:
 extern void post_expose(uint32_t window_id);
+extern void post_resize(uint32_t window_id, unsigned int width, unsigned int height);
 extern bool post_window_close(uint32_t window_id);
 
 #endif
