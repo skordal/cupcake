@@ -30,25 +30,13 @@ package Cupcake.Components is
 	function Keyboard_Handler(This : in Component_Record; Keyboard_Event : in Events.Keyboard_Event_Record)
 		return Boolean;
 
-	-- Component operations:
-	procedure Set_Expanding(This : out Component_Record'Class; Expanding : in Boolean := true);
-	function Get_Expanding(This : in Component_Record'Class) return Boolean;
-	pragma Inline(Set_Expanding, Get_Expanding);
-
-	procedure Set_Size(This : in out Component_Record'Class; Size : in Primitives.Dimension);
-	function Get_Size(This : in Component_Record'Class) return Primitives.Dimension;
-	pragma Inline(Get_Size);
-
-	function Get_Preferred_Size(This : in Component_Record'Class) return Primitives.Dimension;
-	pragma Inline(Get_Preferred_Size);
-
 	---- LABEL COMPONENT ----
 
 	-- Label component:
 	type Label_Record (<>) is new Component_Record with private;
 
 	-- Creates a new label:
-	function New_Label(Text : in String; Expanding : in Boolean := false) return Component;
+	function New_Label(Text : in String) return Component;
 
 	-- Expose handler for the label:
 	overriding procedure Expose_Handler(This : in out Label_Record; Graphics_Context : in Graphics.Context);
@@ -62,18 +50,14 @@ private
 
 	-- Component base type definition:
 	type Component_Record is abstract new Events.Event_Receiver with record
-			Minimum_Size : Primitives.Dimension := Unbounded_Size;
-			Preferred_Size : Primitives.Dimension := Unbounded_Size;
-			Maximum_Size : Primitives.Dimension := Unbounded_Size;
 			Background_Color : Colors.Color := Colors.DEFAULT_BACKGROUND_COLOR;
 			Foreground_Color : Colors.Color := Colors.DEFAULT_FOREGROUND_COLOR;
-			Size : Primitives.Dimension := (0, 0);
-			Expanding : Boolean := false;
 		end record;
 
 	-- Label component type definition:
 	type Label_Record is new Component_Record with record
 			Text : Unbounded_String;
+			Font : Fonts.Font := Default_Font;
 		end record;
 
 end Cupcake.Components;

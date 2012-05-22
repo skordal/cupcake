@@ -20,63 +20,20 @@ package body Cupcake.Components is
 		return true;
 	end Keyboard_Handler;
 
-	-- Sets the expanding property of a component:
-	procedure Set_Expanding(This : out Component_Record'Class; Expanding : in Boolean := true) is
-	begin
-		This.Expanding := Expanding;
-	end Set_Expanding;
-
-	-- Gets the expanding property of a component:
-	function Get_Expanding(This : in Component_Record'Class) return Boolean is
-	begin
-		return This.Expanding;
-	end Get_Expanding;
-
-	-- Sets the size of a component:
-	procedure Set_Size(This : in out Component_Record'Class; Size : in Primitives.Dimension) is
-	begin
-		This.Resize_Handler(Size);
-	end Set_Size;
-
-	-- Gets the size of a component:
-	function Get_Size(This : in Component_Record'Class) return Primitives.Dimension is
-	begin
-		return This.Size;
-	end Get_Size;
-
-	-- Gets the preferred size of a component:
-	function Get_Preferred_Size(This : in Component_Record'Class) return Primitives.Dimension is
-	begin
-		return This.Preferred_Size;
-	end Get_Preferred_Size;
-
 	-- Creates a new label component:
-	function New_Label(Text : in String; Expanding : in Boolean := false) return Component is
+	function New_Label(Text : in String) return Component is
 		Retval : constant Component := new Label_Record;
-		Size : constant Primitives.Dimension := (Integer(Default_Font.Get_Size) * Text'Length,
-			Integer(Default_Font.Get_Size));
 	begin
 		Label_Record(Retval.all).Text := To_Unbounded_String(Text);
-		Label_Record(Retval.all).Minimum_Size := Size;
-		Label_Record(Retval.all).Preferred_Size := Size;
-		Label_Record(Retval.all).Size := Size;
-		Label_Record(Retval.all).Expanding := Expanding;
-
 		return Retval;
 	end New_label;
 
 	-- Expose handler for the label component:
 	procedure Expose_Handler(This : in out Label_Record; Graphics_Context : in Graphics.Context) is
 		Text_String : constant String := To_String(This.Text);
-		Text_Width : constant Natural := Graphics_Context.Get_String_Length(Text_String, Default_Font);
-		X_Offset, Y_Offset : Natural := 0;
 	begin
-		This.Size.Width := Text_Width;
-		X_Offset := (Graphics_Context.Get_Size.Width - Text_Width) / 2;
-		Y_Offset := (Graphics_Context.Get_Size.Height - Natural(Default_Font.Get_Size)) / 2;
-
-		Graphics_Context.Render_String(This.Foreground_Color, Text_String, Default_Font, 
-			(X_Offset, Y_Offset + Natural(Default_Font.Get_Size)));
+		Graphics_Context.Render_String(This.Foreground_Color, Text_String, This.Font,
+			(0, Natural(This.Font.Get_Size)));
 	end Expose_Handler;
 
 end Cupcake.Components;
