@@ -7,10 +7,32 @@
 #ifndef CUPCAKE_BACKEND_H
 #define CUPCAKE_BACKEND_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <pthread.h>
+#include <unistd.h>
+
+#include <xcb/xcb.h>
+#include <xcb/xproto.h>
+#include <cairo/cairo.h>
 
 #include "events.h"
+#include "fonts.h"
+#include "windows.h"
+
+// XCB X server connection:
+extern xcb_connection_t * connection;
+// XCB screen:
+extern xcb_screen_t * screen;
+// XCB visual type:
+extern xcb_visualtype_t * visual_type;
+
+// XCB atoms relating to allowing us to close windows ourselves:
+extern xcb_atom_t protocols_atom, delete_window_atom;
 
 // Utility function exported from the Ada code: gets the backend specific
 // data for a specific window ID:
@@ -27,25 +49,8 @@ bool backend_initialize();
 // by the backend.
 void backend_finalize();
 
-// Creates a window:
-void * backend_window_create(const void * parent,
-	int width, int height);
-// Finalizes a window:
-void backend_window_finalize(void * window);
-
-// Gets the ID number of a window:
-uint32_t backend_window_get_id(const void * window);
-
-// Sets the window title:
-void backend_window_set_title(void * window, const char * title);
-// Shows a window:
-void backend_window_show(void * window);
-// Closes a window:
-void backend_window_close(void * window);
-
 // Runs the main loop:
 void backend_main_loop();
-
 // Exits the main loop:
 void backend_main_loop_terminate();
 

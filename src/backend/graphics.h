@@ -11,14 +11,16 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include "windows.h"
+
 // Draws a line between the specified coordinates:
-void backend_draw_line(void * window, int x1, int y1, int x2, int y2, float line_width);
+void backend_draw_line(backend_window_t * window, int x1, int y1, int x2, int y2, float line_width);
 
 // Sets the current color to be used in susequent drawing operations:
-void backend_set_color(void * window, float r, float g, float b);
+void backend_set_color(backend_window_t * window, float r, float g, float b);
 
 // Fills the specified rectangle:
-void backend_fill_rectangle(void * window, int x, int y, int w, int h);
+void backend_fill_rectangle(backend_window_t * window, int x, int y, int w, int h);
 
 #endif
 

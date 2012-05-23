@@ -6,7 +6,10 @@ include ../../config.mk
 .PHONY: all clean
 
 SOURCE_FILES := \
-	cairo-backend.c \
+	backend.c \
+	fonts.c \
+	graphics.c \
+	windows.c
 
 OBJECT_FILES = $(SOURCE_FILES:.c=.o)
 
@@ -17,7 +20,4 @@ clean:
 
 %.o: %.c
 	$(GNATCC) -c $(CFLAGS) -o $@ $<
-
-# Dependency information:
-cairo-backend.o: cairo-backend.c backend.h events.h fonts.h graphics.h
 
