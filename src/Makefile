@@ -21,8 +21,7 @@ SPEC_FILES := \
 	cupcake-events.ads
 
 # Object files to build:
-OBJECT_FILES := $(SOURCE_FILES:.adb=.o) $(SPEC_FILES:.ads=.o) \
-	$(C_SOURCE_FILES:.c=.o)
+OBJECT_FILES := $(SOURCE_FILES:.adb=.o) $(SPEC_FILES:.ads=.o)
 
 all: backend $(OBJECT_FILES)
 	$(AR) rc libcupcake-tk.a $(OBJECT_FILES) $(shell find backend -type f | grep '\.o')
