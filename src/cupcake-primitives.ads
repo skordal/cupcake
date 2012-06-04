@@ -18,9 +18,6 @@ package Cupcake.Primitives is
 			Width, Height : Natural;
 		end record;
 
-	-- Null dimension:
-	Null_Dimension : constant Dimension := (0, 0);
-
 	-- Rectangle type:
 	type Rectangle is record
 			Origin : Point;
