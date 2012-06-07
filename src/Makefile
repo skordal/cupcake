@@ -3,7 +3,7 @@
 # Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 include ../config.mk
 
-.PHONY: all backend clean
+.PHONY: all backends clean
 
 # Ada source files to build:
 SOURCE_FILES := \
@@ -23,20 +23,20 @@ SPEC_FILES := \
 # Object files to build:
 OBJECT_FILES := $(SOURCE_FILES:.adb=.o) $(SPEC_FILES:.ads=.o)
 
-all: backend $(OBJECT_FILES)
-	$(AR) rc libcupcake-tk.a $(OBJECT_FILES) $(shell find backend/cairo -type f | grep '\.o')
+all: backends $(OBJECT_FILES)
+	$(AR) rc libcupcake-tk.a $(OBJECT_FILES) $(shell find backends -type f | grep '\.o')
 	$(RANLIB) libcupcake-tk.a
-	gcc -shared -o libcupcake-tk.so $(OBJECT_FILES) $(shell find backend/cairo -type f| grep '\.o') $(LDFLAGS)
+	gcc -shared -o libcupcake-tk.so $(OBJECT_FILES) $(shell find backends -type f| grep '\.o') $(LDFLAGS)
 
-backend:
-	@$(MAKE) -C backend
+backends:
+	@$(MAKE) -C backends
 
 clean:
 	-$(RM) $(OBJECT_FILES)
 	-$(RM) $(SOURCE_FILES:.adb=.ali)
 	-$(RM) $(SPEC_FILES:.ads=.ali)
 	-$(RM) libcupcake-tk.so libcupcake-tk.a
-	@$(MAKE) -C backend clean
+	@$(MAKE) -C backends clean
 
 %.o: %.adb %.ads
 	$(GNATCC) -c $(GNATFLAGS) -o $@ $<
