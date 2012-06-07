@@ -1,23 +1,15 @@
-# The Cupcake GUI Toolkit Makefile
+# The Cupcake GUI Toolkit Backends Top-Level Makefile
 # (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 # Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 include ../../config.mk
 
-.PHONY: all clean
+.PHONY: all cairo clean
 
-SOURCE_FILES := \
-	backend.c \
-	fonts.c \
-	graphics.c \
-	windows.c
-
-OBJECT_FILES = $(SOURCE_FILES:.c=.o)
-
-all: $(OBJECT_FILES)
+all: cairo
 
 clean:
-	-$(RM) $(OBJECT_FILES)
+	-$(MAKE) -C cairo clean
 
-%.o: %.c
-	$(GNATCC) -c $(CFLAGS) -o $@ $<
+cairo:
+	$(MAKE) -C cairo all
 
