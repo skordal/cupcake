@@ -1,7 +1,7 @@
 # Ignore built files:
 *.o
 *.ali
-demos/demos
+demos/demo
 
 # Ignore library files:
 *.a
