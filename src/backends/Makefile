@@ -5,11 +5,16 @@ include ../../config.mk
 
 .PHONY: all cairo clean
 
-all: cairo
+# Backend to build (only one to choose from for now):
+USE_BACKEND := \
+	cairo
+
+all: $(USE_BACKEND)
 
 clean:
 	-$(MAKE) -C cairo clean
 
-cairo:
-	$(MAKE) -C cairo all
+$(USE_BACKEND): cupcake-backends-$(USE_BACKEND).ads cupcake-backends-$(USE_BACKEND).adb
+	$(MAKE) -C $(USE_BACKEND) all
+	$(GNATCC) -c -I.. $(GNATFLAGS) -o cupcake-backends-$(USE_BACKEND).o cupcake-backends-$(USE_BACKEND).adb
 

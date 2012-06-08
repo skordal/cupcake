@@ -27,12 +27,12 @@ I<last> Cupcake function called.
 
 =head1 MAIN LOOP
 
-	procedure Main_Loop;
+	procedure Enter_Main_Loop;
 
 This procedure enters the main loop. When the main loop terminates, the
 procedure returns.
 
-	procedure Main_Loop_Terminate
+	procedure Exit_Main_Loop
 
 This procedure can be used in event handlers to exit from the main loop.
 

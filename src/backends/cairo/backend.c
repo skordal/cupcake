@@ -119,23 +119,16 @@ void * backend_event_thread(void * unused __attribute((unused)))
 		{
 			case XCB_EXPOSE:
 				expose_event = (xcb_expose_event_t *) event;
-				post_expose(expose_event->window);
+				// TODO: Post expose event to window
 				xcb_flush(connection);
 				break;
 			case XCB_CLIENT_MESSAGE:
 				client_message_event = (xcb_client_message_event_t *) event;
-
-				// The backend_window_close function sends a window_closing event
-				// to the window and closes the window if allowed. If such a message
-				// is sent here, the window will not get closed, just removed from
-				// the list of open windows.
-				window_data = get_backend_data_for_window_by_id(client_message_event->window);
-				if(window_data != NULL)
-					backend_window_close(window_data);
+				// TODO: Post close event to window
 				break;
 			case XCB_CONFIGURE_NOTIFY:
 				notify_event = (xcb_configure_notify_event_t *) event;
-				post_resize(notify_event->window, notify_event->width, notify_event->height);
+				// TODO: Post resize event to window
 				break;
 			default:
 				// Ignore unexpected events.

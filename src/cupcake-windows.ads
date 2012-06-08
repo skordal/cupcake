@@ -3,17 +3,14 @@
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
 with Cupcake.Colors;
-with Cupcake.Events;
-with Cupcake.Layouts;
 with Cupcake.Primitives;
 
-private with Ada.Containers.Doubly_Linked_Lists;
-private with Cupcake.Graphics;
+private with Cupcake.Backends;
 
 package Cupcake.Windows is
 
 	-- Normal window type:
-	type Window_Record (<>) is new Events.Window_Event_Receiver with private;
+	type Window_Record (<>) is tagged private;
 	type Window is access all Window_Record'Class;
 
 	-- Type used for window IDs:
@@ -39,59 +36,13 @@ package Cupcake.Windows is
 	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color);
 	pragma Inline(Get_Background_Color, Set_Background_Color);
 
-	procedure Set_Layout(This : out Window_Record'Class; Layout : in Layouts.Layout);
-	function Get_Layout(This : in Window_Record'Class) return Layouts.Layout;
-	pragma Inline(Set_Layout, Get_Layout);
-
-	-- Gets the window ID:
-	function Get_ID(This : in Window_Record'Class) return Window_ID_Type;
-	pragma Inline(Get_ID);
-
 private
-	-- List of displayed application windows, used for event propagation:
-	package Window_Lists is new Ada.Containers.Doubly_Linked_Lists(Window);
-	Window_List : Window_Lists.List;
-
 	-- Normal window type definition:
-	type Window_Record is new Events.Window_Event_Receiver with record
-			Window_ID : Window_ID_Type;
+	type Window_Record is tagged record
 			Size : Primitives.Dimension;
 			Background_Color : Colors.Color := Colors.DEFAULT_BACKGROUND_COLOR;
-			Graphics_Context : Graphics.Context;
-			Backend_Data : Backend_Data_Ptr;
-			Layout : Layouts.Layout := null;
+			Backend_Data : Backends.Window_Data_Pointer;
 		end record;
-
-	-- Event handlers for windows:
-	procedure Expose_Handler(This : in out Window_Record; Graphics_Context : in Graphics.Context);
-	procedure Resize_Handler(This : in out Window_Record; New_Size : in Primitives.Dimension);
-	function Mouse_Handler(This : in Window_Record; Mouse_Event : in Events.Mouse_Event_Record)
-		return Boolean;
-	function Keyboard_Handler(This : in Window_Record; Keyboard_Event : in Events.Keyboard_Event_Record)
-		return Boolean;
-	procedure Window_Shown_Handler(This : in Window_Record) is null;
-	function Window_Closing_Handler(This : in Window_Record) return Boolean;
-
-	-- Finds a window by its ID:
-	function Find_Window_By_ID(ID : in Window_ID_Type) return Window;
-
-	-- Gets the backend data pointer from a window by its ID:
-	function Get_Backend_Data_For_Window_By_ID(ID : in Window_ID_Type) return Backend_Data_Ptr;
-	pragma Export(C, Get_Backend_Data_For_Window_By_ID);
-
-	-- Various methods used by the backend code to send events to windows:
-	procedure Post_Expose(ID : in Window_ID_Type);
-	procedure Post_Resize(ID : in Window_ID_Type; Width, Height : in Natural);
-	function Post_Window_Close(ID : in Window_ID_Type) return Integer; -- 1 = close ok | 0 = don't close
-
-	pragma Export(C, Post_Expose);
-	pragma Export(C, Post_Resize);
-	pragma Export(C, Post_Window_Close);
-
-	-- Method called to check if there are remaining windows:
-	function Get_Num_Windows_Remaining return Natural;
-	pragma Inline(Get_Num_Windows_Remaining);
-	pragma Export(C, Get_Num_Windows_Remaining);
 
 end Cupcake.Windows;
 

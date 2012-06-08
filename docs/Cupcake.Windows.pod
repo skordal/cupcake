@@ -14,7 +14,7 @@ and dialogues.
 
 =head1 TYPES
 
-	type Window_Record is tagged private;
+	type Window_Record (<>) is tagged private;
 	type Window is access all Window_Record'Class;
 
 =head1 WINDOW CREATION AND DESTRUCTION

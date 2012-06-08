@@ -16,10 +16,13 @@ backend_window_t * backend_window_create(const backend_window_t * parent, int wi
 		parent == NULL ? screen->root : ((backend_window_t *) parent)->window_id,
 		0, 0, width, height, 4, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->root_visual,
 		XCB_CW_EVENT_MASK, &window_event_mask);
+
+	// Set up cairo specific parameters:
 	new_window->cairo_surface = cairo_xcb_surface_create(connection, new_window->window_id,
 		visual_type, width, height);
 	new_window->cairo_context = cairo_create(new_window->cairo_surface);
 
+	// Make sure we are responsible for deleting the window ourselves:
 	xcb_change_property(connection, XCB_PROP_MODE_REPLACE, new_window->window_id,
 		protocols_atom, XCB_ATOM_ATOM, 32, 1, &delete_window_atom);
 
@@ -67,14 +70,7 @@ void backend_window_show(backend_window_t * window)
 // Closes a window:
 void backend_window_close(backend_window_t * window)
 {
-	if(post_window_close(window->window_id))
-	{
-		xcb_unmap_window(connection, window->window_id);
-		xcb_flush(connection);
-	} else
-		return;
-
-	if(get_num_windows_remaining() == 0)
-		backend_main_loop_terminate();
+	xcb_unmap_window(connection, window->window_id);
+	xcb_flush(connection);
 }
 

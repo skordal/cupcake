@@ -8,17 +8,13 @@ include ../config.mk
 # Ada source files to build:
 SOURCE_FILES := \
 	cupcake.adb \
-	cupcake-components.adb \
-	cupcake-fonts.adb \
-	cupcake-graphics.adb \
-	cupcake-layouts.adb \
+	cupcake-backends.adb \
 	cupcake-primitives.adb \
 	cupcake-windows.adb
 
 # Ada specification files to build:
 SPEC_FILES := \
-	cupcake-colors.ads \
-	cupcake-events.ads
+	cupcake-colors.ads
 
 # Object files to build:
 OBJECT_FILES := $(SOURCE_FILES:.adb=.o) $(SPEC_FILES:.ads=.o)
@@ -39,8 +35,8 @@ clean:
 	@$(MAKE) -C backends clean
 
 %.o: %.adb %.ads
-	$(GNATCC) -c $(GNATFLAGS) -o $@ $<
+	$(GNATCC) -c $(GNATFLAGS) -Ibackends -o $@ $<
 
 %.o: %.ads
-	$(GNATCC) -c $(GNATFLAGS) -o $@ $<
+	$(GNATCC) -c $(GNATFLAGS) -Ibackends -o $@ $<
 

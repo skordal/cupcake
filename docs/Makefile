@@ -7,8 +7,6 @@ include ../config.mk
 
 PODFILES := \
 	Cupcake.pod \
-	Cupcake.Events.pod \
-	Cupcake.Graphics.pod \
 	Cupcake.Windows.pod
 
 MANPAGES := $(PODFILES:.pod=.3)

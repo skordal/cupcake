@@ -20,7 +20,6 @@
 #include <xcb/xproto.h>
 #include <cairo/cairo.h>
 
-#include "events.h"
 #include "fonts.h"
 #include "windows.h"
 
