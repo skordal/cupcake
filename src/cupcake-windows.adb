@@ -172,6 +172,8 @@ package body Cupcake.Windows is
 		return true;
 	end Window_Closing_Handler;
 
+	-- Window closing message handler:
+
 	-- Finds a window by its ID:
 	function Find_Window_By_ID(ID : in Window_ID_Type) return Window is
 		use Window_Lists;
