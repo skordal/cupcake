@@ -16,5 +16,11 @@ package body Cupcake.Primitives is
 		return ((Left.X - Right.X), (Left.Y - Right.Y));
 	end "-";
 
+	-- Compares two points for equality:
+	function "=" (Left, Right : in Point) return Boolean is
+	begin
+		return ((Left.X = Right.X) and (Left.Y = Right.Y));
+	end "=";
+
 end Cupcake.Primitives;
 
