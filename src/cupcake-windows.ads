@@ -25,16 +25,16 @@ package Cupcake.Windows is
 	procedure Destroy(Object : not null access Window_Record);
 
 	-- Window operations:
-	procedure Show(This : in Window_Record'Class);
-	procedure Close(This : in Window_Record'Class);
-	pragma Inline(Show, Close);
+	procedure Show(This : in Window_Record'Class) with Inline;
+	procedure Close(This : in Window_Record'Class) with Inline;
 
-	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension;
-	pragma Inline(Get_Size);
+	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension
+		with Inline;
 
-	function Get_Background_Color(This : in Window_Record'Class) return Colors.Color;
-	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color);
-	pragma Inline(Get_Background_Color, Set_Background_Color);
+	function Get_Background_Color(This : in Window_Record'Class) return Colors.Color
+		with Inline;
+	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color)
+		with Inline;
 
 private
 	-- Normal window type definition:

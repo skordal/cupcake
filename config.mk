@@ -13,7 +13,7 @@ M4      ?= m4
 POD2MAN ?= pod2man
 
 # Build flags:
-GNATFLAGS += -O2 -fPIC -gnatwa -gnatVa -gnatE
+GNATFLAGS += -O2 -fPIC -gnatwa -gnatVa -gnatE -gnat2012
 CFLAGS    += -O2 -fPIC -Wall -std=gnu99 -g $(shell pkg-config --cflags xcb cairo)
 LDFLAGS   += $(shell pkg-config --libs xcb cairo) -Wl,-rpath=/usr/local/lib
 

@@ -10,8 +10,8 @@ package Cupcake.Primitives is
 		end record;
 
 	-- Point operators:
-	function "+" (Left, Right : in Point) return Point;
-	function "-" (Left, Right : in Point) return Point;
+	function "+" (Left, Right : in Point) return Point with Inline;
+	function "-" (Left, Right : in Point) return Point with Inline;
 
 	-- Type for specifying dimensions:
 	type Dimension is record

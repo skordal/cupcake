@@ -14,7 +14,7 @@ package Cupcake.Colors is
 
 	-- Multiplies all color components of a Color with a constant:
 	function "*" (Left : in Color; Right : in Float) return Color;
-	function "*" (Left : in Float; Right : in Color) return Color;
+	function "*" (Left : in Float; Right : in Color) return Color with Inline;
 
 	-- Predefined color constants:
 	BLACK	: constant Color := (0.0, 0.0, 0.0);
