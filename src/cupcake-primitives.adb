@@ -22,5 +22,23 @@ package body Cupcake.Primitives is
 		return ((Left.X = Right.X) and (Left.Y = Right.Y));
 	end "=";
 
+	-- Compares two dimensions:
+	function "<" (Left, Right : in Dimension) return Boolean is
+	begin
+		return (Left.Width * Left.Height) < (Right.Width * Right.Height);
+	end "<";
+
+	-- Compares two dimensions:
+	function ">" (Left, Right : in Dimension) return Boolean is
+	begin
+		return (Left.Width * Left.Height) > (Right.Width * Right.Height);
+	end ">";
+
+	-- Compares two dimensions:
+	function "=" (Left, Right : in Dimension) return Boolean is
+	begin
+		return (Left.Width * Left.Height) = (Right.Width * Right.Height);
+	end "=";
+
 end Cupcake.Primitives;
 

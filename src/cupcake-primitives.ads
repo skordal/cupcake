@@ -19,6 +19,11 @@ package Cupcake.Primitives is
 			Width, Height : Natural;
 		end record;
 
+	-- Dimension operators:
+	function "<" (Left, Right : in Dimension) return Boolean with Inline;
+	function ">" (Left, Right : in Dimension) return Boolean with Inline;
+	function "=" (Left, Right : in Dimension) return Boolean with Inline;
+
 	-- Rectangle type:
 	type Rectangle is record
 			Origin : Point;
