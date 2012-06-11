@@ -2,8 +2,6 @@
 -- (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
-with Cupcake.Backends.Cairo;
-
 package body Cupcake.Backends is
 
 	-- Gets the backend class to be used:
