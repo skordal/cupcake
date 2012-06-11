@@ -74,6 +74,7 @@ package body Cupcake.Backends.Cairo is
 	function New_Window(This : in Cairo_Backend; Title : in String; Size : in Primitives.Dimension;
 		Position : in Primitives.Point := (0, 0);
 		Parent : in Window_Data_Pointer := Null_Window_Data_Pointer) return Window_Data_Pointer is
+		use Cupcake.Primitives;
 
 		function Backend_Window_Create(Parent : in Window_Data_Pointer;
 			Width, Height : Positive) return Window_Data_Pointer;
@@ -82,7 +83,7 @@ package body Cupcake.Backends.Cairo is
 		Retval : constant Window_Data_Pointer := Backend_Window_Create(Parent,
 			Size.Width, Size.Height);
 	begin
-		if Debug_Mode then
+		if Debug_Mode and then Position /= (0, 0) then
 			Ada.Text_IO.Put_Line("[Cupcake.Backends.Cairo.Cairo_Backend.New_Window] "
 				& "The position argument is currently ignored.");
 		end if;
