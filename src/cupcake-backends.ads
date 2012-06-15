@@ -48,6 +48,10 @@ package Cupcake.Backends is
 	type Window_Data_Pointer is new System.Address;
 	Null_Window_Data_Pointer : constant Window_Data_Pointer := Window_Data_Pointer(System.Null_Address);
 
+	-- Type used for window IDs:
+	type Window_ID_Type is mod 2**32;
+	for Window_ID_Type'Size use 32;
+
 	-- Creates a new window:
 	function New_Window(This : in Backend; Title : in String;
 		Size : in Primitives.Dimension; Position : in Primitives.Point := (0, 0);
@@ -57,6 +61,10 @@ package Cupcake.Backends is
 	-- Destroys a window:
 	procedure Destroy_Window(This : in out Backend; Window_Data : in out Window_Data_Pointer)
 		is abstract;
+
+	-- Gets the ID of a window:
+	function Get_Window_ID(This : in Backend; Window_Data : in Window_Data_Pointer)
+		return Window_ID_Type is abstract;
 
 	-- Sets the title of a window:
 	procedure Set_Window_Title(This : in Backend; Window_Data : in Window_Data_Pointer;

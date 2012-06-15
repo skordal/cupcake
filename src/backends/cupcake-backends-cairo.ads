@@ -42,6 +42,10 @@ package Cupcake.Backends.Cairo is
 	-- Destroys a window:
 	procedure Destroy_Window(This : in out Cairo_Backend; Window_Data : in out Backends.Window_Data_Pointer);
 
+	-- Gets the ID for a window:
+	function Get_Window_ID(This : in Cairo_Backend; Window_Data : in Backends.Window_Data_Pointer)
+		return Backends.Window_ID_Type;
+
 	-- Sets the title for a window:
 	procedure Set_Window_Title(This : in Cairo_Backend; Window_Data : in Backends.Window_Data_Pointer;
 		Title : in String);

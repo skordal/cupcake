@@ -102,6 +102,17 @@ package body Cupcake.Backends.Cairo is
 		Backend_Window_Finalize(Window_Data);
 	end Destroy_Window;
 
+	-- Gets the ID for a window:
+	function Get_Window_ID(This : in Cairo_Backend; Window_Data : in Backends.Window_Data_Pointer)
+		return Backends.Window_ID_Type is
+
+		function Backend_Window_Get_ID(Window_Data : in Window_Data_Pointer)
+			return Backends.Window_ID_Type;
+		pragma Import(C, Backend_Window_Get_ID);
+	begin
+		return Backend_Window_Get_ID(Window_Data);
+	end Get_Window_ID;
+
 	-- Sets the title of a window:
 	procedure Set_Window_Title(This : in Cairo_Backend; Window_Data : in Window_Data_Pointer;
 		Title : in String) is
