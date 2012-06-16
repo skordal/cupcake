@@ -18,6 +18,7 @@ package body Cupcake.Windows is
 		Retval : constant Window := new Window_Record;
 	begin
 		Retval.Backend_Data := Backends.Get_Backend.New_Window(Title, Size);
+		Retval.ID := Backends.Get_Backend.Get_Window_ID(Retval.Backend_Data);
 		Retval.Size := Size;
 		return Retval;
 	end New_Window;

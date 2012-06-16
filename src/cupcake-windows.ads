@@ -13,10 +13,6 @@ package Cupcake.Windows is
 	type Window_Record (<>) is tagged private;
 	type Window is access all Window_Record'Class;
 
-	-- Type used for window IDs:
-	type Window_ID_Type is mod 2**32;
-	for Window_ID_Type'Size use 32;
-
 	-- Creates a new window:
 	function New_Window(Width, Height : in Positive; Title : in String) return Window;
 	function New_Window(Size : in Primitives.Dimension; Title : in String) return Window;
@@ -42,6 +38,7 @@ private
 			Size : Primitives.Dimension;
 			Background_Color : Colors.Color := Colors.DEFAULT_BACKGROUND_COLOR;
 			Backend_Data : Backends.Window_Data_Pointer;
+			ID : Backends.Window_ID_Type;
 		end record;
 
 end Cupcake.Windows;
