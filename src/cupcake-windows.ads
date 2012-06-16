@@ -29,10 +29,10 @@ package Cupcake.Windows is
 	procedure Close(This : in Window_Record'Class) with Inline;
 
 	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension
-		with Inline;
+		with Inline, Pure_Function;
 
 	function Get_Background_Color(This : in Window_Record'Class) return Colors.Color
-		with Inline;
+		with Inline, Pure_Function;
 	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color)
 		with Inline;
 

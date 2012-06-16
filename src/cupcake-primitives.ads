@@ -10,9 +10,9 @@ package Cupcake.Primitives is
 		end record;
 
 	-- Point operators:
-	function "+" (Left, Right : in Point) return Point with Inline;
-	function "-" (Left, Right : in Point) return Point with Inline;
-	function "=" (Left, Right : in Point) return Boolean with Inline;
+	function "+" (Left, Right : in Point) return Point with Inline, Pure_Function;
+	function "-" (Left, Right : in Point) return Point with Inline, Pure_Function;
+	function "=" (Left, Right : in Point) return Boolean with Inline, Pure_Function;
 
 	-- Type for specifying dimensions:
 	type Dimension is record
@@ -20,9 +20,9 @@ package Cupcake.Primitives is
 		end record;
 
 	-- Dimension operators:
-	function "<" (Left, Right : in Dimension) return Boolean with Inline;
-	function ">" (Left, Right : in Dimension) return Boolean with Inline;
-	function "=" (Left, Right : in Dimension) return Boolean with Inline;
+	function "<" (Left, Right : in Dimension) return Boolean with Inline, Pure_Function;
+	function ">" (Left, Right : in Dimension) return Boolean with Inline, Pure_Function;
+	function "=" (Left, Right : in Dimension) return Boolean with Inline, Pure_Function;
 
 	-- Rectangle type:
 	type Rectangle is record

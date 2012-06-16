@@ -19,7 +19,7 @@ package Cupcake.Backends is
 	Initialization_Error : exception;
 
 	-- Gets and sets the backend to be used for operations:
-	function Get_Backend return Backend_Access with Inline;
+	function Get_Backend return Backend_Access with Inline, Pure_Function;
 	procedure Set_Backend(Use_Backend : in Backend_Access) with Inline;
 
 	---- GENERAL BACKEND OPERATIONS: ----
