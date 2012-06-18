@@ -128,6 +128,14 @@ package body Cupcake.Backends.Cairo is
 		Free(C_Title);
 	end Set_Window_Title;
 
+	-- Sets the size of a window:
+	procedure Set_Window_Size(This : in Cairo_Backend; Window_Data : in Window_Data_Pointer;
+		Size : in Primitives.Dimension) is
+	begin
+		Ada.Text_IO.Put_Line("[Cupcake.Backends.Cairo.Cairo_Backend.Set_Window_Size]"
+			& "This procedure has not yet been implemented in this backend");
+	end Set_Window_Size;
+
 	-- Sets the window visibility:
 	procedure Set_Window_Visibility(This : in Cairo_Backend; Window_Data : in Window_Data_Pointer;
 		Visibility : in Boolean) is

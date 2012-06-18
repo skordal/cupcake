@@ -70,6 +70,10 @@ package Cupcake.Backends is
 	procedure Set_Window_Title(This : in Backend; Window_Data : in Window_Data_Pointer;
 		Title : in String) is abstract;
 
+	-- Sets the size of a window:
+	procedure Set_Window_Size(This : in Backend; Window_Data : in Window_Data_Pointer;
+		Size : in Primitives.Dimension) is abstract;
+
 	-- Sets the window visibility on screen:
 	procedure Set_Window_Visibility(This : in Backend; Window_Data : in Window_Data_Pointer;
 		Visibility : in Boolean) is abstract;

@@ -50,6 +50,10 @@ package Cupcake.Backends.Cairo is
 	procedure Set_Window_Title(This : in Cairo_Backend; Window_Data : in Backends.Window_Data_Pointer;
 		Title : in String);
 
+	-- Sets the size of a window:
+	procedure Set_Window_Size(This : in Cairo_Backend; Window_Data : in Backends.Window_Data_Pointer;
+		Size : in Primitives.Dimension);
+
 	-- Sets the window visibility on the screen:
 	procedure Set_Window_Visibility(This : in Cairo_Backend; Window_Data : in Backends.Window_Data_Pointer;
 		Visibility : in Boolean);
