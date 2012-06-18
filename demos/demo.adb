@@ -18,7 +18,7 @@ begin
 	Initialize;
 
 	Test_Window := Windows.New_Window(Window_Size, "Test Application");
-	Test_Window.Show;
+	Test_Window.Set_Visible;
 
 	Enter_Main_Loop;
 

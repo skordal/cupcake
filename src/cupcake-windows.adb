@@ -32,28 +32,35 @@ package body Cupcake.Windows is
 
 		Win : Window_Access := Window_Access(Object);
 	begin
-		Object.Close;
+		Object.Set_Visible(false);
 		Backends.Get_Backend.Destroy_Window(Object.Backend_Data);
 		Free(Win);
 	end Destroy;
 
-	-- Shows a window:
-	procedure Show(This : in Window_Record'Class) is
+	-- Sets the visibility of a window:
+	procedure Set_Visible(This : access Window_Record'Class; Visible : Boolean := true) is
+		use Window_Lists;
+		Window_Cursor : Cursor := Window_List.Find(Item => This);
 	begin
-		Backends.Get_Backend.Set_Window_Visibility(This.Backend_Data, true);
-	end Show;
-
-	-- Closes a window:
-	procedure Close(This : in Window_Record'Class) is
-	begin
-		Backends.Get_Backend.Set_Window_Visibility(This.Backend_Data, false);
-	end Close;
+		Backends.Get_Backend.Set_Window_Visibility(This.Backend_Data, Visible);
+		if Visible and not Has_Element(Window_Cursor) then
+			Window_List.Append(This);
+		elsif not Visible and Has_Element(Window_Cursor) then
+			Window_List.Delete(Window_Cursor);
+		end if;
+	end Set_Visible;
 
 	-- Gets the size of a window:
 	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension is
 	begin
 		return This.Size;
 	end Get_Size;
+
+	-- Sets the size of a window:
+	procedure Set_Size(This : in out Window_Record'Class; Size : in Primitives.Dimension) is
+	begin
+		Backends.Get_Backend.Set_Window_Size(This.Backend_Data, Size);
+	end Set_Size;
 
 	-- Gets the background color of a window:
 	function Get_Background_Color(This : in Window_Record'Class) return Colors.Color is
