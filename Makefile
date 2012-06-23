@@ -5,7 +5,7 @@ include config.mk
 
 .PHONY: all demos docs clean
 
-all: docs
+all:
 	@$(MAKE) -C src all
 
 demos: all

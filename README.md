@@ -21,7 +21,7 @@ To build Cupcake, you need the following pre-requisites:
 * Ada and C compilers, GCC is recommended as I use it myself.
 * Cairo built with the XCB backend, and XCB itself.
 * FontConfig and FreeType for font handling (not implemented yet, but coming soon).
-* Pod2Man and M4, else the build will fail when trying to build manual pages.
+* Pod2Man and M4 if you want to build the manual pages.
 
 When everything is ready to go, simply issue _make_, and watch the library be built, hopefully without problems. To do a simple test of the library functionality, you may run the demo applications in the demos folder.
 
