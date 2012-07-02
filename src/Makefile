@@ -22,7 +22,8 @@ OBJECT_FILES := $(SOURCE_FILES:.adb=.o) $(SPEC_FILES:.ads=.o)
 all: backends $(OBJECT_FILES)
 	$(AR) rc libcupcake-tk.a $(OBJECT_FILES) $(shell find backends -type f | grep '\.o')
 	$(RANLIB) libcupcake-tk.a
-	gcc -shared -o libcupcake-tk.so $(OBJECT_FILES) $(shell find backends -type f| grep '\.o') $(LDFLAGS)
+	gcc -shared -o libcupcake-tk.so $(OBJECT_FILES) $(shell find backends -type f | grep '\.o') \
+		$(LDFLAGS)
 
 backends:
 	@$(MAKE) -C backends

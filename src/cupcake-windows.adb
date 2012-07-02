@@ -2,6 +2,7 @@
 -- (c) Kristian Klomsten Skordal 2012 <kristian.skordal@gmail.com>
 -- Report bugs and issues on <http://github.com/skordal/cupcake/issues>
 
+with Ada.Text_IO;
 with Ada.Unchecked_Deallocation;
 
 package body Cupcake.Windows is
@@ -40,15 +41,21 @@ package body Cupcake.Windows is
 	-- Sets the visibility of a window:
 	procedure Set_Visible(This : access Window_Record'Class; Visible : Boolean := true) is
 		use Window_Lists;
-		Window_Cursor : Cursor := Window_List.Find(Item => This);
+		Window_Cursor : Cursor := Visible_Window_List.Find(Item => This);
 	begin
 		Backends.Get_Backend.Set_Window_Visibility(This.Backend_Data, Visible);
 		if Visible and not Has_Element(Window_Cursor) then
-			Window_List.Append(This);
+			Visible_Window_List.Append(This);
 		elsif not Visible and Has_Element(Window_Cursor) then
-			Window_List.Delete(Window_Cursor);
+			Visible_Window_List.Delete(Window_Cursor);
 		end if;
 	end Set_Visible;
+
+	-- Gets the ID of a window:
+	function Get_ID(This : in Window_Record'Class) return Backends.Window_ID_Type is
+	begin
+		return This.ID;
+	end Get_ID;
 
 	-- Gets the size of a window:
 	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension is
@@ -73,6 +80,30 @@ package body Cupcake.Windows is
 	begin
 		This.Background_Color := Color;
 	end Set_Background_Color;
+
+	-- Posts an expose event to a window:
+	procedure Post_Expose(ID : in Backends.Window_ID_Type) is
+		use Backends;
+	begin
+		for Win of Visible_Window_List loop
+			if Win.Get_ID = ID then
+				Win.Post_Expose;
+				exit;
+			end if;
+		end loop;
+	end Post_Expose;
+
+	-- Posts an expose event to a window:
+	procedure Post_Expose(This : in Window_Record'Class) is
+	begin
+		if Debug_Mode then
+			Ada.Text_IO.Put_Line("[Cupcake.Windows.Post_Expose] "
+				& "Expose received for window ID "
+				& Backends.Window_ID_Type'Image(This.Get_ID));
+		end if;
+
+		Backends.Get_Backend.Fill_Area(This.Backend_Data, ((0, 0), This.Size), This.Background_Color);
+	end Post_Expose;
 
 end Cupcake.Windows;
 

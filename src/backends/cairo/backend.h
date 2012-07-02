@@ -20,6 +20,8 @@
 #include <xcb/xproto.h>
 #include <cairo/cairo.h>
 
+#include "../exports.h"
+
 #include "fonts.h"
 #include "windows.h"
 

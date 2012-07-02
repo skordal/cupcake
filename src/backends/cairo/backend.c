@@ -119,7 +119,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 		{
 			case XCB_EXPOSE:
 				expose_event = (xcb_expose_event_t *) event;
-				// TODO: Post expose event to window
+				post_expose(expose_event->window);
 				xcb_flush(connection);
 				break;
 			case XCB_CLIENT_MESSAGE:
