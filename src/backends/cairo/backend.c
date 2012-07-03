@@ -128,7 +128,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 				break;
 			case XCB_CONFIGURE_NOTIFY:
 				notify_event = (xcb_configure_notify_event_t *) event;
-				// TODO: Post resize event to window
+				post_resize(notify_event->window, notify_event->width, notify_event->height);
 				break;
 			default:
 				// Ignore unexpected events.

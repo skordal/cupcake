@@ -24,10 +24,6 @@ package Cupcake.Windows is
 	-- Sets the visibility of a window; this is used to show and close windows:
 	procedure Set_Visible(This : access Window_Record'Class; Visible : Boolean := true);
 
-	-- Gets the ID of a window:
-	function Get_ID(This : in Window_Record'Class) return Backends.Window_ID_Type
-		with Inline, Pure_Function;
-
 	-- Window size operations:
 	function Get_Size(This : in Window_Record'Class) return Primitives.Dimension
 		with Inline, Pure_Function;
@@ -40,16 +36,29 @@ package Cupcake.Windows is
 	procedure Set_Background_Color(This : out Window_Record'Class; Color : in Colors.Color)
 		with Inline;
 
+	-- Expose handler for windows:
+	procedure Expose_Handler(This : in Window_Record'Class);
+
+	-- Resize handler for windows:
+	procedure Resize_Handler(This : in out Window_Record'Class; New_Size : in Primitives.Dimension);
+
 	-- Posts an expose event to a window; this causes a redraw of the entire window:
 	procedure Post_Expose(ID : in Backends.Window_ID_Type);
 	pragma Export(C, Post_Expose);
-
 	procedure Post_Expose(This : in Window_Record'Class);
+
+	-- Posts a resize event to a window:
+	procedure Post_Resize(ID : in Backends.Window_ID_Type; Width, Height : in Natural);
+	pragma Export(C, Post_Resize);
+	procedure Post_Resize(ID : in Backends.Window_ID_Type; New_Size : in Primitives.Dimension);
 
 private
 	-- List of active windows, for event propagation:
 	package Window_Lists is new Ada.Containers.Doubly_Linked_Lists(Element_Type => Window);
 	Visible_Window_List : Window_Lists.List;
+
+	-- Gets a window pointer by ID if the window is visible; returns null otherwise:
+	function Get_Visible_Window(ID : in Backends.Window_ID_Type) return Window;
 
 	-- Normal window type definition:
 	type Window_Record is tagged limited record

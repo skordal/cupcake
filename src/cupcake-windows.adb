@@ -81,16 +81,25 @@ package body Cupcake.Windows is
 		This.Background_Color := Color;
 	end Set_Background_Color;
 
+	-- Expose event handler:
+	procedure Expose_Handler(This : in Window_Record'Class) is
+	begin
+		Backends.Get_Backend.Fill_Area(This.Backend_Data, ((0, 0), This.Size), This.Background_Color);
+	end Expose_Handler;
+
+	-- Resize event handler:
+	procedure Resize_Handler(This : in out Window_Record'Class; New_Size : in Primitives.Dimension) is
+	begin
+		This.Size := New_Size;
+	end Resize_Handler;
+
 	-- Posts an expose event to a window:
 	procedure Post_Expose(ID : in Backends.Window_ID_Type) is
-		use Backends;
+		Target : constant Window := Get_Visible_Window(ID);
 	begin
-		for Win of Visible_Window_List loop
-			if Win.Get_ID = ID then
-				Win.Post_Expose;
-				exit;
-			end if;
-		end loop;
+		if Target /= null then
+			Target.Post_Expose;
+		end if;
 	end Post_Expose;
 
 	-- Posts an expose event to a window:
@@ -102,8 +111,43 @@ package body Cupcake.Windows is
 				& Backends.Window_ID_Type'Image(This.Get_ID));
 		end if;
 
-		Backends.Get_Backend.Fill_Area(This.Backend_Data, ((0, 0), This.Size), This.Background_Color);
+		This.Expose_Handler;
 	end Post_Expose;
+
+	-- Posts a resize event to a window:
+	procedure Post_Resize(ID : in Backends.Window_ID_Type; Width, Height : in Natural) is
+	begin
+		Post_Resize(ID, (Width, Height));
+	end Post_Resize;
+
+	-- Posts a resize event to a window:
+	procedure Post_Resize(ID : in Backends.Window_ID_Type; New_Size : in Primitives.Dimension) is
+		use Primitives;
+		Target : constant Window := Get_Visible_Window(ID);
+	begin
+		if Debug_Mode then
+			Ada.Text_IO.Put_Line("[Cupcake.Windows.Post_Resize] "
+				& "Resize event received for window ID "
+				& Backends.Window_ID_Type'Image(ID));
+		end if;
+
+		if Target /= null and then Target.Size /= New_Size then
+			Target.Resize_Handler(New_Size);
+		end if;
+	end Post_Resize;
+
+	-- Gets a pointer to a visible window or null if no window was found:
+	function Get_Visible_Window(ID : in Backends.Window_ID_Type) return Window is
+		use Backends;
+	begin
+		for Win of Visible_Window_List loop
+			if Win.ID = ID then
+				return Win;
+			end if;
+		end loop;
+
+		return null;
+	end Get_Visible_Window;
 
 end Cupcake.Windows;
 
