@@ -19,6 +19,7 @@
 #include <xcb/xcb.h>
 #include <xcb/xproto.h>
 #include <cairo/cairo.h>
+#include <cairo/cairo-xcb.h>
 
 #include "../exports.h"
 
