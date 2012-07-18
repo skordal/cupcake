@@ -125,13 +125,12 @@ package body Cupcake.Windows is
 		use Primitives;
 		Target : constant Window := Get_Visible_Window(ID);
 	begin
-		if Debug_Mode then
-			Ada.Text_IO.Put_Line("[Cupcake.Windows.Post_Resize] "
-				& "Resize event received for window ID "
-				& Backends.Window_ID_Type'Image(ID));
-		end if;
-
 		if Target /= null and then Target.Size /= New_Size then
+			if Debug_Mode then
+				Ada.Text_IO.Put_Line("[Cupcake.Windows.Post_Resize] "
+					& "Resize event received for window ID "
+					& Backends.Window_ID_Type'Image(ID));
+			end if;
 			Target.Resize_Handler(New_Size);
 		end if;
 	end Post_Resize;
