@@ -13,6 +13,9 @@ The project is in heavy development, and the code changes often. In addition, th
 
 Cupcake's current capabilities are:
 * Can show a window on the screen.
+* Can close a window on the screen.
+* Can draw a background in the aforementioned window.
+* Can crash when exiting ;-)
 
 How do I build and install it?
 ------------------------------
