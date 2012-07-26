@@ -42,6 +42,11 @@ package Cupcake.Windows is
 	-- Resize handler for windows:
 	procedure Resize_Handler(This : in out Window_Record'Class; New_Size : in Primitives.Dimension);
 
+	-- Close event handler for windows; returns true if the window should close:
+	function Close_Handler(This : in Window_Record'Class) return Boolean;
+
+	---- BACKEND OPERATIONS: ----
+
 	-- Posts an expose event to a window; this causes a redraw of the entire window:
 	procedure Post_Expose(ID : in Backends.Window_ID_Type);
 	pragma Export(C, Post_Expose);
@@ -52,6 +57,10 @@ package Cupcake.Windows is
 	pragma Export(C, Post_Resize);
 	procedure Post_Resize(ID : in Backends.Window_ID_Type; New_Size : in Primitives.Dimension);
 
+	-- Posts a close request to a window:
+	procedure Post_Close_Event(ID : in Backends.Window_ID_Type);
+	pragma Export(C, Post_Close_Event);
+
 private
 	-- List of active windows, for event propagation:
 	package Window_Lists is new Ada.Containers.Doubly_Linked_Lists(Element_Type => Window);
@@ -59,6 +68,8 @@ private
 
 	-- Gets a window pointer by ID if the window is visible; returns null otherwise:
 	function Get_Visible_Window(ID : in Backends.Window_ID_Type) return Window;
+	function Get_Visible_Window(ID : in Backends.Window_ID_Type) return Backends.Window_Data_Pointer;
+	pragma Export(C, Get_Visible_Window);
 
 	-- Normal window type definition:
 	type Window_Record is tagged limited record

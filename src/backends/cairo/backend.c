@@ -124,7 +124,7 @@ void * backend_event_thread(void * unused __attribute((unused)))
 				break;
 			case XCB_CLIENT_MESSAGE:
 				client_message_event = (xcb_client_message_event_t *) event;
-				// TODO: Post close event to window
+				post_close_event(client_message_event->window);
 				break;
 			case XCB_CONFIGURE_NOTIFY:
 				notify_event = (xcb_configure_notify_event_t *) event;

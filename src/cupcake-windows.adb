@@ -43,11 +43,18 @@ package body Cupcake.Windows is
 		use Window_Lists;
 		Window_Cursor : Cursor := Visible_Window_List.Find(Item => This);
 	begin
-		Backends.Get_Backend.Set_Window_Visibility(This.Backend_Data, Visible);
 		if Visible and not Has_Element(Window_Cursor) then
 			Visible_Window_List.Append(This);
-		elsif not Visible and Has_Element(Window_Cursor) then
+			Backends.Get_Backend.Set_Window_Visibility(This.Backend_Data, Visible);
+		elsif (not Visible and Has_Element(Window_Cursor))
+			and then Element(Window_Cursor).Close_Handler
+		then
 			Visible_Window_List.Delete(Window_Cursor);
+			Backends.Get_Backend.Set_Window_Visibility(This.Backend_Data, Visible);
+
+			if Visible_Window_List.Is_Empty then
+				Backends.Get_Backend.Exit_Main_Loop;
+			end if;
 		end if;
 	end Set_Visible;
 
@@ -93,7 +100,13 @@ package body Cupcake.Windows is
 		This.Size := New_Size;
 	end Resize_Handler;
 
-	-- Posts an expose event to a window:
+	--  Window close event handler:
+	function Close_Handler(This : in Window_Record'Class) return Boolean is
+	begin
+		return true;
+	end Close_Handler;
+
+	--  Posts an expose event to a window:
 	procedure Post_Expose(ID : in Backends.Window_ID_Type) is
 		Target : constant Window := Get_Visible_Window(ID);
 	begin
@@ -135,7 +148,21 @@ package body Cupcake.Windows is
 		end if;
 	end Post_Resize;
 
-	-- Gets a pointer to a visible window or null if no window was found:
+	--  Posts a close event to a window:
+	procedure Post_Close_Event(ID : in Backends.Window_ID_Type) is
+		Target : constant Window := Get_Visible_Window(ID);
+	begin
+		if Target /= null then
+			if Debug_Mode then
+				Ada.Text_IO.Put_Line("[Cupcake.Windows.Post_Close_Event] "
+					& "Close request received for window ID "
+					& Backends.Window_ID_Type'Image(ID));
+			end if;
+			Target.Set_Visible(false);
+		end if;
+	end Post_Close_Event;
+
+	--  Gets a pointer to a visible window or null if no window was found:
 	function Get_Visible_Window(ID : in Backends.Window_ID_Type) return Window is
 		use Backends;
 	begin
@@ -146,6 +173,18 @@ package body Cupcake.Windows is
 		end loop;
 
 		return null;
+	end Get_Visible_Window;
+
+	--  Gets the backend data for a visible window or null if no window was found:
+	function Get_Visible_Window(ID : in Backends.Window_ID_Type)
+		return Backends.Window_Data_Pointer is
+		Target : constant Window := Get_Visible_Window(ID);
+	begin
+		if Target /= null then
+			return Target.Backend_Data;
+		else
+			return Backends.Null_Window_Data_Pointer;
+		end if;
 	end Get_Visible_Window;
 
 end Cupcake.Windows;
