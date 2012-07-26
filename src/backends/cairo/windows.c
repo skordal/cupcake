@@ -21,6 +21,7 @@ backend_window_t * backend_window_create(const backend_window_t * parent, int wi
 	new_window->cairo_surface = cairo_xcb_surface_create(connection, new_window->window_id,
 		visual_type, width, height);
 	new_window->cairo_context = cairo_create(new_window->cairo_surface);
+	cairo_surface_destroy(new_window->cairo_surface);
 
 	// Make sure we are responsible for deleting the window ourselves:
 	xcb_change_property(connection, XCB_PROP_MODE_REPLACE, new_window->window_id,
@@ -34,7 +35,6 @@ backend_window_t * backend_window_create(const backend_window_t * parent, int wi
 void backend_window_finalize(backend_window_t * window)
 {
 	cairo_destroy(window->cairo_context);
-	cairo_surface_destroy(window->cairo_surface);
 
 	xcb_unmap_window(connection, window->window_id);
 	xcb_destroy_window(connection, window->window_id);
